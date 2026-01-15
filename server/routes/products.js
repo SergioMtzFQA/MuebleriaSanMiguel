@@ -1,0 +1,120 @@
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+
+// Multer Config
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// In-memory product store (mock DB)
+let serverProducts = [];
+
+// Helper to parse comma or JSON list
+const parseList = (input) => {
+    try {
+        return typeof input === 'string' ? JSON.parse(input) : input;
+    } catch (e) {
+        return typeof input === 'string' ? input.split(',').map(s => s.trim()).filter(s => s) : [];
+    }
+};
+
+// GET All
+router.get('/', (req, res) => {
+    res.json(serverProducts);
+});
+
+// GET One (Optional but good practice)
+router.get('/:id', (req, res) => {
+    const product = serverProducts.find(p => p.id == req.params.id);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    res.json(product);
+});
+
+// CREATE
+router.post('/', upload.array('images', 10), (req, res) => {
+    const { name, category, price, description, materials, colors, stock } = req.body;
+
+    const imageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+    const parsedMaterials = parseList(materials);
+    const parsedColors = parseList(colors);
+
+    const variants = [{ name: "Color", options: parsedColors }];
+
+    const newProduct = {
+        id: Date.now(),
+        name,
+        category,
+        price,
+        description,
+        materials: parsedMaterials,
+        variants: variants,
+        images: imageUrls,
+        stock: parseInt(stock) || 0
+    };
+
+    serverProducts.push(newProduct);
+    res.status(201).json(newProduct);
+});
+
+// UPDATE
+router.put('/:id', upload.array('images', 10), (req, res) => {
+    const id = parseInt(req.params.id);
+    const productIndex = serverProducts.findIndex(p => p.id === id);
+
+    if (productIndex === -1) {
+        return res.status(404).json({ message: 'Product not found' });
+    }
+
+    const { name, category, price, description, materials, colors, stock, existingImages } = req.body;
+
+    // Handle Images: Mix of kept existing images + new uploads
+    const newImageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+    let keptImages = [];
+    if (existingImages) {
+        keptImages = Array.isArray(existingImages) ? existingImages : [existingImages];
+    }
+
+    // Parse JSON string if it came as a single stringified array
+    if (keptImages.length === 1 && keptImages[0].startsWith('[')) {
+        try { keptImages = JSON.parse(keptImages[0]); } catch (e) { }
+    }
+
+    const finalImages = [...keptImages, ...newImageUrls];
+
+    const parsedMaterials = parseList(materials);
+    const parsedColors = parseList(colors);
+    const variants = [{ name: "Color", options: parsedColors }];
+
+    const updatedProduct = {
+        ...serverProducts[productIndex],
+        name,
+        category,
+        price,
+        description,
+        materials: parsedMaterials,
+        variants,
+        stock: parseInt(stock) || 0,
+        images: finalImages
+    };
+
+    serverProducts[productIndex] = updatedProduct;
+    res.json(updatedProduct);
+});
+
+// DELETE
+router.delete('/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    serverProducts = serverProducts.filter(p => p.id !== id);
+    res.status(200).json({ message: 'Product deleted' });
+});
+
+module.exports = router;

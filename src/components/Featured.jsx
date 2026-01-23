@@ -1,14 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import './Featured.css';
 
-const MOCK_FEATURED = [
-    { id: 1, name: 'Sofá Imperial', category: 'Sala', image: 'https://via.placeholder.com/400x300?text=Sofa+Imperial', description: 'Confort y elegancia en terciopelo.', isNew: true },
-    { id: 2, name: 'Comedor Real', category: 'Comedor', image: 'https://via.placeholder.com/400x300?text=Comedor+Real', description: 'Madera de roble con acabados finos.', isNew: false },
-    { id: 3, name: 'Sillón Lounge', category: 'Sala', image: 'https://via.placeholder.com/400x300?text=Sillon+Lounge', description: 'Diseño minimalista moderno.', isNew: true },
-];
-
 const Featured = () => {
+    const [featuredProducts, setFeaturedProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('/api/products')
+            .then(res => res.json())
+            .then(data => {
+                const featured = data.filter(p => p.isFeatured === true || p.isFeatured === 'true');
+                setFeaturedProducts(featured);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error('Error fetching featured products:', err);
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) return null; // Or a loader if preferred, but for landing page silence is often better
+
+    if (featuredProducts.length === 0) return null; // Don't show section if no featured products
+
     return (
         <section className="featured section-padding">
             <div className="container">
@@ -23,7 +39,7 @@ const Featured = () => {
                 </motion.div>
 
                 <div className="products-grid">
-                    {MOCK_FEATURED.map((product, index) => (
+                    {featuredProducts.map((product, index) => (
                         <motion.div
                             key={product.id}
                             className="product-card"
@@ -32,16 +48,21 @@ const Featured = () => {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                         >
-                            <div className="card-image">
-                                <img src={product.image} alt={product.name} />
-                                {product.isNew && <span className="badge-new">Nuevo</span>}
-                            </div>
-                            <div className="card-info">
-                                <span>{product.category}</span>
-                                <h3>{product.name}</h3>
-                                <p>{product.description}</p>
-                                <button className="btn-link">Ver Detalles &rarr;</button>
-                            </div>
+                            <Link to={`/product/${product.id}`}>
+                                <div className="card-image">
+                                    <img
+                                        src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/400x300'}
+                                        alt={product.name}
+                                    />
+                                    {/* You could add logic for 'New' badge based on date if desired */}
+                                </div>
+                                <div className="card-info">
+                                    <span>{product.category}</span>
+                                    <h3>{product.name}</h3>
+                                    <p className="description-truncate">{product.description}</p>
+                                    <span className="btn-link">Ver Detalles &rarr;</span>
+                                </div>
+                            </Link>
                         </motion.div>
                     ))}
                 </div>

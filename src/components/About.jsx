@@ -28,8 +28,28 @@ const About = () => {
                                 <p><strong>Dirección:</strong> Av. del Mueble 123, Zona Industrial, CDMX.</p>
                             </div>
                         </div>
-                        <div className="about-image">
-                            <div className="placeholder-box">Imagen de Taller/Fábrica</div>
+                        <div className="about-image map-container">
+                            <iframe
+                                title="Ubicación Mueblería San Miguel"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3619.726509192903!2d-99.56483282302514!3d24.873188744745086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x867ced73e30d21f1%3A0xe82eecfde18359a9!2sSillas%20San%20Miguel!5e0!3m2!1ses-419!2smx!4v1769141069415!5m2!1ses-419!2smx"
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0, minHeight: '350px', borderRadius: '8px' }}
+                                allowFullScreen=""
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                            <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                                <a
+                                    href="https://maps.app.goo.gl/gWTA45oPG6n11xSk7"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn-link"
+                                    style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}
+                                >
+                                    📍 Abrir en Google Maps
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </motion.div>

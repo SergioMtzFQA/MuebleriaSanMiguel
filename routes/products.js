@@ -41,7 +41,7 @@ router.get('/:id', (req, res) => {
 
 // CREATE
 router.post('/', upload.array('images', 10), (req, res) => {
-    const { name, category, price, description, materials, colors, stock } = req.body;
+    const { name, category, price, description, materials, colors, stock, isFeatured } = req.body;
 
     const imageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
     const parsedMaterials = parseList(materials);
@@ -53,12 +53,13 @@ router.post('/', upload.array('images', 10), (req, res) => {
         id: Date.now(),
         name,
         category,
-        price,
+        price: parseFloat(price) || 0,
         description,
         materials: parsedMaterials,
         variants: variants,
         images: imageUrls,
-        stock: parseInt(stock) || 0
+        stock: parseInt(stock) || 0,
+        isFeatured: isFeatured === 'true' || isFeatured === true
     };
 
     serverProducts.push(newProduct);
@@ -74,7 +75,7 @@ router.put('/:id', upload.array('images', 10), (req, res) => {
         return res.status(404).json({ message: 'Product not found' });
     }
 
-    const { name, category, price, description, materials, colors, stock, existingImages } = req.body;
+    const { name, category, price, description, materials, colors, stock, existingImages, isFeatured } = req.body;
 
     // Handle Images: Mix of kept existing images + new uploads
     const newImageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
@@ -98,12 +99,13 @@ router.put('/:id', upload.array('images', 10), (req, res) => {
         ...serverProducts[productIndex],
         name,
         category,
-        price,
+        price: parseFloat(price) || 0,
         description,
         materials: parsedMaterials,
         variants,
         stock: parseInt(stock) || 0,
-        images: finalImages
+        images: finalImages,
+        isFeatured: isFeatured === 'true' || isFeatured === true
     };
 
     serverProducts[productIndex] = updatedProduct;

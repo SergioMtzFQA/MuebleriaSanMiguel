@@ -11,11 +11,12 @@ const Admin = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
 
+    // Start of Admin.jsx modification
     // Form State
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({
-        name: '', category: '', price: '', description: '',
-        materials: '', colors: '', stock: ''
+        name: '', category: '', description: '',
+        materials: '', colors: '', isFeatured: false
     });
     const [existingImages, setExistingImages] = useState([]); // URLs of images already on server
     const [newImages, setNewImages] = useState([]); // File objects for new uploads
@@ -44,8 +45,8 @@ const Admin = () => {
     const handleCreateNew = () => {
         setEditingId(null);
         setFormData({
-            name: '', category: '', price: '', description: '',
-            materials: '', colors: '', stock: ''
+            name: '', category: '', description: '',
+            materials: '', colors: '', isFeatured: false
         });
         setExistingImages([]);
         setNewImages([]);
@@ -58,11 +59,10 @@ const Admin = () => {
         setFormData({
             name: product.name,
             category: product.category,
-            price: product.price,
             description: product.description,
             materials: Array.isArray(product.materials) ? product.materials.join(', ') : product.materials,
             colors: product.variants && product.variants[0] ? product.variants[0].options.join(', ') : '',
-            stock: product.stock || 0
+            isFeatured: product.isFeatured || false
         });
         setExistingImages(product.images || []);
         setNewImages([]);
@@ -87,7 +87,8 @@ const Admin = () => {
     };
 
     const handleFormChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+        setFormData({ ...formData, [e.target.name]: value });
     };
 
     const handleNewImageChange = (e) => {
@@ -106,12 +107,13 @@ const Admin = () => {
         const data = new FormData();
         data.append('name', formData.name);
         data.append('category', formData.category);
-        data.append('price', formData.price);
+        data.append('price', '0'); // Default price
         data.append('description', formData.description);
         // Be flexible with comma separated lists
         data.append('materials', JSON.stringify(formData.materials.toString().split(',').map(s => s.trim())));
         data.append('colors', JSON.stringify(formData.colors.toString().split(',').map(s => s.trim())));
-        data.append('stock', formData.stock);
+        data.append('stock', '0'); // Default stock
+        data.append('isFeatured', formData.isFeatured);
 
         // Existing Images (send as JSON array string for backend to parse)
         // If editing, we send the LIST of images we want to KEEP
@@ -159,8 +161,6 @@ const Admin = () => {
                         <th>Img</th>
                         <th>Nombre</th>
                         <th>Categoría</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -176,15 +176,13 @@ const Admin = () => {
                             </td>
                             <td>{p.name}</td>
                             <td>{p.category}</td>
-                            <td>${p.price}</td>
-                            <td>{p.stock || 0}</td>
                             <td>
                                 <button className="btn-icon edit" onClick={() => handleEdit(p)}>✏️</button>
                                 <button className="btn-icon delete" onClick={() => handleDelete(p.id)}>🗑️</button>
                             </td>
                         </tr>
                     ))}
-                    {products.length === 0 && <tr><td colSpan="6" style={{ textAlign: 'center' }}>No hay productos.</td></tr>}
+                    {products.length === 0 && <tr><td colSpan="4" style={{ textAlign: 'center' }}>No hay productos.</td></tr>}
                 </tbody>
             </table>
         </div>
@@ -201,19 +199,9 @@ const Admin = () => {
                     <input name="name" value={formData.name} onChange={handleFormChange} required />
                 </div>
 
-                <div className="form-group-row">
-                    <div className="form-group">
-                        <label>Categoría</label>
-                        <input name="category" value={formData.category} onChange={handleFormChange} required />
-                    </div>
-                    <div className="form-group">
-                        <label>Precio</label>
-                        <input name="price" type="number" value={formData.price} onChange={handleFormChange} required />
-                    </div>
-                    <div className="form-group">
-                        <label>Stock</label>
-                        <input name="stock" type="number" value={formData.stock} onChange={handleFormChange} required />
-                    </div>
+                <div className="form-group">
+                    <label>Categoría</label>
+                    <input name="category" value={formData.category} onChange={handleFormChange} required />
                 </div>
 
                 <div className="form-group">
@@ -222,13 +210,25 @@ const Admin = () => {
                 </div>
 
                 <div className="form-group">
-                    <label>Materiales (comma sep)</label>
-                    <input name="materials" value={formData.materials} onChange={handleFormChange} />
+                    <label className="checkbox-group">
+                        <input
+                            type="checkbox"
+                            name="isFeatured"
+                            checked={formData.isFeatured}
+                            onChange={handleFormChange}
+                        />
+                        <span>Producto Destacado (Mostrar en Inicio)</span>
+                    </label>
                 </div>
 
                 <div className="form-group">
-                    <label>Colores (comma sep)</label>
-                    <input name="colors" value={formData.colors} onChange={handleFormChange} />
+                    <label>Materiales (separados por coma)</label>
+                    <input name="materials" value={formData.materials} onChange={handleFormChange} placeholder="Ej: Madera de roble, Tela premium..." />
+                </div>
+
+                <div className="form-group">
+                    <label>Colores (separados por coma)</label>
+                    <input name="colors" value={formData.colors} onChange={handleFormChange} placeholder="Ej: Rojo, Azul, Beige..." />
                 </div>
 
                 {/* Image Management */}
@@ -247,7 +247,14 @@ const Admin = () => {
 
                 <div className="form-group">
                     <label>Agregar Nuevas Imágenes</label>
-                    <input type="file" onChange={handleNewImageChange} accept="image/*" multiple />
+                    <div className="file-input-wrapper">
+                        <input type="file" onChange={handleNewImageChange} accept="image/*" multiple />
+                        <div className="file-input-label">
+                            {newImages.length > 0
+                                ? `${newImages.length} archivo(s) seleccionado(s)`
+                                : 'Arrastra imágenes aquí o haz clic para seleccionar'}
+                        </div>
+                    </div>
                 </div>
 
                 <button type="submit" className="btn btn-primary btn-block" disabled={loading}>

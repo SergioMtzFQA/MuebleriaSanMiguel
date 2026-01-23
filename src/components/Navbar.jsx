@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
 import './Navbar.css';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
-    const { cartItems } = useCart();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -29,11 +27,6 @@ const Navbar = () => {
                     <li><a href="#about">Nosotros</a></li>
                     <li><a href="#contact">Contacto</a></li>
                 </ul>
-                <div className="nav-actions">
-                    <Link to="/cart" className="cart-btn" aria-label="Cart">
-                        🛒 <span className="cart-count">{cartItems.length}</span>
-                    </Link>
-                </div>
             </div>
         </nav>
     );

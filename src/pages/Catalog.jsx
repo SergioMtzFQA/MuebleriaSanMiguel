@@ -72,7 +72,6 @@ const Catalog = () => {
                             <div className="card-info">
                                 <span>{product.category}</span>
                                 <h3>{product.name}</h3>
-                                <p>${parseInt(product.price).toLocaleString()}</p>
                             </div>
                         </Link>
                     </motion.div>

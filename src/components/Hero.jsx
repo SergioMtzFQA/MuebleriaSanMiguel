@@ -2,13 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import './Hero.css';
-import heroImage from '../assets/hero_furniture_luxury.png';
+// Using a placeholder URL that represents a furniture store for now, 
+// can be replaced by a local asset 'company_hero.jpg' when provided
+const heroImage = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop";
 
 const Hero = () => {
     return (
         <section className="hero">
             <div className="hero-background">
-                <img src={heroImage} alt="Luxury Furniture" />
+                <img src={heroImage} alt="Mueblería San Miguel - Showroom" />
                 <div className="overlay"></div>
             </div>
 

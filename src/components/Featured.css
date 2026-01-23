@@ -37,6 +37,19 @@
     box-shadow: var(--shadow-md);
 }
 
+.product-card a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Ensure inner headings don't get double colored if they inherit */
+.product-card a:visited {
+    color: inherit;
+}
+
 .card-image {
     width: 100%;
     height: 250px;

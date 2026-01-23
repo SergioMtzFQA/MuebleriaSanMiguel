@@ -38,7 +38,6 @@ const Hero = () => {
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                 >
                     <Link to="/catalog" className="btn btn-primary">Ver Catálogo</Link>
-                    <a href="#contact" className="btn btn-secondary-outline">Cotizar Ahora</a>
                 </motion.div>
             </div>
         </section>

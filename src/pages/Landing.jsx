@@ -8,7 +8,7 @@ const Landing = () => {
         <div className="landing-page">
             <Hero />
             <Featured />
-            <About />
+            {/* About is separate page now, but maybe a teaser? User only asked for Featured. Keeping it simple. */}
         </div>
     );
 };

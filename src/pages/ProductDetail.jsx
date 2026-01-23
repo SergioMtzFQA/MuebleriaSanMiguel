@@ -62,69 +62,97 @@ const ProductDetail = () => {
     return (
         <div className="product-detail-page container">
             <div className="product-layout">
-                <motion.div
-                    className="product-gallery"
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                >
-                    <div className="main-image-container" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-                        <img
-                            src={selectedImage || 'https://via.placeholder.com/600x400'}
-                            alt={product.name}
-                            style={zoomStyle}
-                            className="zoomable-image"
-                        />
-                    </div>
-                    {product.images && product.images.length > 1 && (
-                        <div className="thumbnail-list">
-                            {product.images.map((img, idx) => (
-                                <img
-                                    key={idx}
-                                    src={img}
-                                    alt="thumbnail"
-                                    onClick={() => setSelectedImage(img)}
-                                    className={selectedImage === img ? 'active' : ''}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </motion.div>
-
-                <motion.div
-                    className="product-info"
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                >
+                <div className="product-full-header">
                     <span className="category">{product.category}</span>
                     <h1>{product.name}</h1>
-                    <p className="description">{product.description}</p>
+                </div>
 
-                    {product.materials && product.materials.length > 0 && (
-                        <div className="materials-section">
-                            <h4>Materiales:</h4>
-                            <ul>
-                                {product.materials.map((m, i) => <li key={i}>{m}</li>)}
-                            </ul>
+                <div className="product-main-content">
+                    <motion.div
+                        className="product-gallery"
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                    >
+                        <div className="main-image-container" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+                            <img
+                                src={selectedImage || 'https://via.placeholder.com/600x400'}
+                                alt={product.name}
+                                style={zoomStyle}
+                                className="zoomable-image"
+                            />
                         </div>
-                    )}
+                        {product.images && product.images.length > 1 && (
+                            <div className="thumbnail-list">
+                                {product.images.map((img, idx) => (
+                                    <img
+                                        key={idx}
+                                        src={img}
+                                        alt="thumbnail"
+                                        onClick={() => setSelectedImage(img)}
+                                        className={selectedImage === img ? 'active' : ''}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </motion.div>
 
-                    {product.variants && product.variants.length > 0 && (
-                        <div className="variants-section">
-                            {product.variants.map((v) => (
-                                <div key={v.name} className="materials-section"> {/* Reusing materials style for consistency */}
-                                    <h4>{v.name === 'Color' ? 'Colores Disponibles:' : v.name + ':'}</h4>
-                                    <ul>
-                                        {v.options.map((opt, i) => <li key={i}>{opt}</li>)}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                    <motion.div
+                        className="product-description-side"
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                    >
+                        <h3>Descripción</h3>
+                        <p className="description">{product.description}</p>
+                    </motion.div>
+                </div>
 
-                    <div className="actions">
-                        {/* Catalog mode actions can go here if needed later */}
-                    </div>
-                </motion.div>
+                <div className="product-specs-container">
+                    <motion.div
+                        className="specs-column left"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                    >
+                        {product.materials && product.materials.length > 0 && (
+                            <div className="materials-section">
+                                <h4>Materiales</h4>
+                                <ul>
+                                    {product.materials.map((m, i) => <li key={i}>{m}</li>)}
+                                </ul>
+                            </div>
+                        )}
+                    </motion.div>
+
+                    <motion.div
+                        className="specs-column right"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                    >
+                        {product.variants && product.variants.length > 0 && (
+                            <div className="variants-section">
+                                {product.variants.map((v) => (
+                                    <div key={v.name} className="materials-section">
+                                        <h4>{v.name === 'Color' ? 'Colores Disponibles' : v.name}</h4>
+                                        <ul>
+                                            {v.options.map((opt, i) => <li key={i}>{opt}</li>)}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </motion.div>
+                </div>
+
+                {product.descriptionImages && product.descriptionImages.length > 0 && (
+                    <motion.div
+                        className="description-images-section"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                    >
+                        {product.descriptionImages.map((img, idx) => (
+                            <img key={idx} src={img} alt="Detalle del producto" style={{ width: '100%' }} />
+                        ))}
+                    </motion.div>
+                )}
             </div>
         </div>
     );

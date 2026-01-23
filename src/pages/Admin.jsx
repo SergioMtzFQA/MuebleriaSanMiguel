@@ -20,6 +20,8 @@ const Admin = () => {
     });
     const [existingImages, setExistingImages] = useState([]); // URLs of images already on server
     const [newImages, setNewImages] = useState([]); // File objects for new uploads
+    const [existingDescriptionImages, setExistingDescriptionImages] = useState([]);
+    const [newDescriptionImages, setNewDescriptionImages] = useState([]);
 
     // Fetch Products on load or after update
     const fetchProducts = () => {
@@ -50,6 +52,8 @@ const Admin = () => {
         });
         setExistingImages([]);
         setNewImages([]);
+        setExistingDescriptionImages([]);
+        setNewDescriptionImages([]);
         setMessage('');
         setView('form');
     };
@@ -65,7 +69,9 @@ const Admin = () => {
             isFeatured: product.isFeatured || false
         });
         setExistingImages(product.images || []);
+        setExistingDescriptionImages(product.descriptionImages || []);
         setNewImages([]);
+        setNewDescriptionImages([]);
         setMessage('');
         setView('form');
     };
@@ -99,6 +105,30 @@ const Admin = () => {
         setExistingImages(prev => prev.filter(url => url !== imgUrl));
     };
 
+    // Description Image Handlers
+    const handlePaste = (e) => {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        let files = [];
+        for (let index in items) {
+            const item = items[index];
+            if (item.kind === 'file' && item.type.startsWith('image/')) {
+                const blob = item.getAsFile();
+                files.push(blob);
+            }
+        }
+        if (files.length > 0) {
+            setNewDescriptionImages(prev => [...prev, ...files]);
+        }
+    };
+
+    const handleRemoveNewDescImage = (index) => {
+        setNewDescriptionImages(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const handleRemoveExistingDescImage = (imgUrl) => {
+        setExistingDescriptionImages(prev => prev.filter(url => url !== imgUrl));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -115,8 +145,7 @@ const Admin = () => {
         data.append('stock', '0'); // Default stock
         data.append('isFeatured', formData.isFeatured);
 
-        // Existing Images (send as JSON array string for backend to parse)
-        // If editing, we send the LIST of images we want to KEEP
+        // Existing Images
         if (existingImages.length > 0) {
             existingImages.forEach(img => data.append('existingImages', img));
         }
@@ -124,6 +153,16 @@ const Admin = () => {
         // New Images
         for (let i = 0; i < newImages.length; i++) {
             data.append('images', newImages[i]);
+        }
+
+        // Existing Description Images
+        if (existingDescriptionImages.length > 0) {
+            existingDescriptionImages.forEach(img => data.append('existingDescriptionImages', img));
+        }
+
+        // New Description Images
+        for (let i = 0; i < newDescriptionImages.length; i++) {
+            data.append('descriptionImages', newDescriptionImages[i]);
         }
 
         const url = editingId ? `/api/products/${editingId}` : '/api/products';
@@ -205,8 +244,32 @@ const Admin = () => {
                 </div>
 
                 <div className="form-group">
-                    <label>Descripción</label>
-                    <textarea name="description" value={formData.description} onChange={handleFormChange} required rows="3" />
+                    <label>Descripción (Pega imágenes aquí)</label>
+                    <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleFormChange}
+                        onPaste={handlePaste}
+                        required
+                        rows="5"
+                        placeholder="Escribe la descripción del producto. Puedes pegar imágenes (Ctrl+V) directamente aquí."
+                    />
+                    {/* Description Images Preview */}
+                    <div className="desc-images-preview" style={{ marginTop: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        {existingDescriptionImages.map((img, idx) => (
+                            <div key={`existing-${idx}`} className="image-preview" style={{ position: 'relative', width: '80px', height: '80px' }}>
+                                <img src={img} alt="desc-prev" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                                <button type="button" className="remove-img-btn" onClick={() => handleRemoveExistingDescImage(img)} style={{ position: 'absolute', top: -5, right: -5, background: 'red', color: 'white', borderRadius: '50%', border: 'none', width: '20px', height: '20px', cursor: 'pointer' }}>X</button>
+                            </div>
+                        ))}
+                        {newDescriptionImages.map((file, idx) => (
+                            <div key={`new-${idx}`} className="image-preview" style={{ position: 'relative', width: '80px', height: '80px' }}>
+                                <img src={URL.createObjectURL(file)} alt="desc-prev-new" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                                <button type="button" className="remove-img-btn" onClick={() => handleRemoveNewDescImage(idx)} style={{ position: 'absolute', top: -5, right: -5, background: 'red', color: 'white', borderRadius: '50%', border: 'none', width: '20px', height: '20px', cursor: 'pointer' }}>X</button>
+                            </div>
+                        ))}
+                    </div>
+                    {newDescriptionImages.length > 0 && <small style={{ color: 'green' }}>{newDescriptionImages.length} imagen(es) nuevas para la descripción.</small>}
                 </div>
 
                 <div className="form-group">
@@ -233,7 +296,7 @@ const Admin = () => {
 
                 {/* Image Management */}
                 <div className="form-group">
-                    <label>Imágenes Actuales</label>
+                    <label>Imágenes Actuales del Producto</label>
                     <div className="existing-images-grid">
                         {existingImages.map((img, idx) => (
                             <div key={idx} className="image-preview">
@@ -246,7 +309,7 @@ const Admin = () => {
                 </div>
 
                 <div className="form-group">
-                    <label>Agregar Nuevas Imágenes</label>
+                    <label>Agregar Nuevas Imágenes del Producto</label>
                     <div className="file-input-wrapper">
                         <input type="file" onChange={handleNewImageChange} accept="image/*" multiple />
                         <div className="file-input-label">

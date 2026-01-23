@@ -4,6 +4,7 @@ import './Navbar.css';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -13,6 +14,10 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    };
+
     return (
         <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="container navbar-content">
@@ -21,11 +26,18 @@ const Navbar = () => {
                         <h2>Mueblerias San Miguel</h2>
                     </Link>
                 </div>
-                <ul className="nav-links">
-                    <li><Link to="/">Inicio</Link></li>
-                    <li><Link to="/catalog">Catálogo</Link></li>
-                    <li><a href="#about">Nosotros</a></li>
-                    <li><a href="#contact">Contacto</a></li>
+
+                <div className="menu-icon" onClick={toggleMenu}>
+                    <div className={`bar ${menuOpen ? 'open' : ''}`}></div>
+                    <div className={`bar ${menuOpen ? 'open' : ''}`}></div>
+                    <div className={`bar ${menuOpen ? 'open' : ''}`}></div>
+                </div>
+
+                <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
+                    <li><Link to="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
+                    <li><Link to="/catalog" onClick={() => setMenuOpen(false)}>Catálogo</Link></li>
+                    <li><Link to="/about" onClick={() => setMenuOpen(false)}>Nosotros</Link></li>
+                    <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contacto</Link></li>
                 </ul>
             </div>
         </nav>

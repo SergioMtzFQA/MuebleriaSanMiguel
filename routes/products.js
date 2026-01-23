@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const Product = require('../src/api/models/Product');
 
 // Multer Config
 const storage = multer.diskStorage({
@@ -15,9 +16,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// In-memory product store (mock DB)
-let serverProducts = [];
-
 // Helper to parse comma or JSON list
 const parseList = (input) => {
     try {
@@ -28,95 +26,122 @@ const parseList = (input) => {
 };
 
 // GET All
-router.get('/', (req, res) => {
-    res.json(serverProducts);
+router.get('/', async (req, res) => {
+    try {
+        const products = await Product.findAll({ order: [['id', 'ASC']] });
+        res.json(products);
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        res.status(500).json({ message: 'Error fetching products' });
+    }
 });
 
-// GET One (Optional but good practice)
-router.get('/:id', (req, res) => {
-    const product = serverProducts.find(p => p.id == req.params.id);
-    if (!product) return res.status(404).json({ message: 'Product not found' });
-    res.json(product);
+// GET One
+router.get('/:id', async (req, res) => {
+    try {
+        const product = await Product.findByPk(req.params.id);
+        if (!product) return res.status(404).json({ message: 'Product not found' });
+        res.json(product);
+    } catch (err) {
+        console.error('Error fetching product:', err);
+        res.status(500).json({ message: 'Error fetching product' });
+    }
 });
 
 // CREATE
-router.post('/', upload.array('images', 10), (req, res) => {
-    const { name, category, price, description, materials, colors, stock, isFeatured } = req.body;
+router.post('/', upload.array('images', 10), async (req, res) => {
+    try {
+        const { name, category, price, description, materials, colors, stock, isFeatured } = req.body;
 
-    const imageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
-    const parsedMaterials = parseList(materials);
-    const parsedColors = parseList(colors);
+        const imageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+        const parsedMaterials = parseList(materials);
+        const parsedColors = parseList(colors);
 
-    const variants = [{ name: "Color", options: parsedColors }];
+        const variants = [{ name: "Color", options: parsedColors }];
 
-    const newProduct = {
-        id: Date.now(),
-        name,
-        category,
-        price: parseFloat(price) || 0,
-        description,
-        materials: parsedMaterials,
-        variants: variants,
-        images: imageUrls,
-        stock: parseInt(stock) || 0,
-        isFeatured: isFeatured === 'true' || isFeatured === true
-    };
+        const newProduct = await Product.create({
+            name,
+            category,
+            price: parseFloat(price) || 0,
+            description,
+            materials: parsedMaterials,
+            variants: variants,
+            images: imageUrls,
+            stock: parseInt(stock) || 0,
+            isFeatured: isFeatured === 'true' || isFeatured === true
+        });
 
-    serverProducts.push(newProduct);
-    res.status(201).json(newProduct);
+        res.status(201).json(newProduct);
+    } catch (err) {
+        console.error('Error creating product:', err);
+        res.status(500).json({ message: 'Error creating product' });
+    }
 });
 
 // UPDATE
-router.put('/:id', upload.array('images', 10), (req, res) => {
-    const id = parseInt(req.params.id);
-    const productIndex = serverProducts.findIndex(p => p.id === id);
+router.put('/:id', upload.array('images', 10), async (req, res) => {
+    try {
+        const id = req.params.id;
+        const product = await Product.findByPk(id);
 
-    if (productIndex === -1) {
-        return res.status(404).json({ message: 'Product not found' });
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        const { name, category, price, description, materials, colors, stock, existingImages, isFeatured } = req.body;
+
+        // Handle Images
+        const newImageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+        let keptImages = [];
+        if (existingImages) {
+            keptImages = Array.isArray(existingImages) ? existingImages : [existingImages];
+        }
+
+        if (keptImages.length === 1 && keptImages[0].startsWith('[')) {
+            try { keptImages = JSON.parse(keptImages[0]); } catch (e) { }
+        }
+
+        const finalImages = [...keptImages, ...newImageUrls];
+
+        const parsedMaterials = parseList(materials);
+        const parsedColors = parseList(colors);
+        const variants = [{ name: "Color", options: parsedColors }];
+
+        await product.update({
+            name,
+            category,
+            price: parseFloat(price) || 0,
+            description,
+            materials: parsedMaterials,
+            variants,
+            stock: parseInt(stock) || 0,
+            images: finalImages,
+            isFeatured: isFeatured === 'true' || isFeatured === true
+        });
+
+        res.json(product);
+    } catch (err) {
+        console.error('Error updating product:', err);
+        res.status(500).json({ message: 'Error updating product' });
     }
-
-    const { name, category, price, description, materials, colors, stock, existingImages, isFeatured } = req.body;
-
-    // Handle Images: Mix of kept existing images + new uploads
-    const newImageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
-    let keptImages = [];
-    if (existingImages) {
-        keptImages = Array.isArray(existingImages) ? existingImages : [existingImages];
-    }
-
-    // Parse JSON string if it came as a single stringified array
-    if (keptImages.length === 1 && keptImages[0].startsWith('[')) {
-        try { keptImages = JSON.parse(keptImages[0]); } catch (e) { }
-    }
-
-    const finalImages = [...keptImages, ...newImageUrls];
-
-    const parsedMaterials = parseList(materials);
-    const parsedColors = parseList(colors);
-    const variants = [{ name: "Color", options: parsedColors }];
-
-    const updatedProduct = {
-        ...serverProducts[productIndex],
-        name,
-        category,
-        price: parseFloat(price) || 0,
-        description,
-        materials: parsedMaterials,
-        variants,
-        stock: parseInt(stock) || 0,
-        images: finalImages,
-        isFeatured: isFeatured === 'true' || isFeatured === true
-    };
-
-    serverProducts[productIndex] = updatedProduct;
-    res.json(updatedProduct);
 });
 
 // DELETE
-router.delete('/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    serverProducts = serverProducts.filter(p => p.id !== id);
-    res.status(200).json({ message: 'Product deleted' });
+router.delete('/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const product = await Product.findByPk(id);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        await product.destroy();
+        res.status(200).json({ message: 'Product deleted' });
+    } catch (err) {
+        console.error('Error deleting product:', err);
+        res.status(500).json({ message: 'Error deleting product' });
+    }
 });
 
 module.exports = router;

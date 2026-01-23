@@ -1,0 +1,28 @@
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.contact-map {
+    min-height: 400px;
+}
+
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .contact-map {
+        min-height: 300px;
+        order: 2;
+        /* Ensure map is second if needed, though default DOM order does this */
+    }
+
+    .contact-info {
+        order: 1;
+    }
+}

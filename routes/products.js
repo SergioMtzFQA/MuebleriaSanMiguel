@@ -49,11 +49,12 @@ router.get('/:id', async (req, res) => {
 });
 
 // CREATE
-router.post('/', upload.array('images', 10), async (req, res) => {
+router.post('/', upload.fields([{ name: 'images', maxCount: 10 }, { name: 'descriptionImages', maxCount: 10 }]), async (req, res) => {
     try {
         const { name, category, price, description, materials, colors, stock, isFeatured } = req.body;
 
-        const imageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+        const imageUrls = req.files['images'] ? req.files['images'].map(file => `/uploads/${file.filename}`) : [];
+        const descriptionImageUrls = req.files['descriptionImages'] ? req.files['descriptionImages'].map(file => `/uploads/${file.filename}`) : [];
         const parsedMaterials = parseList(materials);
         const parsedColors = parseList(colors);
 
@@ -67,6 +68,7 @@ router.post('/', upload.array('images', 10), async (req, res) => {
             materials: parsedMaterials,
             variants: variants,
             images: imageUrls,
+            descriptionImages: descriptionImageUrls,
             stock: parseInt(stock) || 0,
             isFeatured: isFeatured === 'true' || isFeatured === true
         });
@@ -79,7 +81,7 @@ router.post('/', upload.array('images', 10), async (req, res) => {
 });
 
 // UPDATE
-router.put('/:id', upload.array('images', 10), async (req, res) => {
+router.put('/:id', upload.fields([{ name: 'images', maxCount: 10 }, { name: 'descriptionImages', maxCount: 10 }]), async (req, res) => {
     try {
         const id = req.params.id;
         const product = await Product.findByPk(id);
@@ -88,10 +90,10 @@ router.put('/:id', upload.array('images', 10), async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        const { name, category, price, description, materials, colors, stock, existingImages, isFeatured } = req.body;
+        const { name, category, price, description, materials, colors, stock, existingImages, existingDescriptionImages, isFeatured } = req.body;
 
         // Handle Images
-        const newImageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+        const newImageUrls = req.files['images'] ? req.files['images'].map(file => `/uploads/${file.filename}`) : [];
         let keptImages = [];
         if (existingImages) {
             keptImages = Array.isArray(existingImages) ? existingImages : [existingImages];
@@ -102,6 +104,19 @@ router.put('/:id', upload.array('images', 10), async (req, res) => {
         }
 
         const finalImages = [...keptImages, ...newImageUrls];
+
+        // Handle Description Images
+        const newDescriptionImageUrls = req.files['descriptionImages'] ? req.files['descriptionImages'].map(file => `/uploads/${file.filename}`) : [];
+        let keptDescriptionImages = [];
+        if (existingDescriptionImages) {
+            keptDescriptionImages = Array.isArray(existingDescriptionImages) ? existingDescriptionImages : [existingDescriptionImages];
+        }
+        // Handle potential stringified array
+        if (keptDescriptionImages.length === 1 && keptDescriptionImages[0].startsWith('[')) {
+            try { keptDescriptionImages = JSON.parse(keptDescriptionImages[0]); } catch (e) { }
+        }
+
+        const finalDescriptionImages = [...keptDescriptionImages, ...newDescriptionImageUrls];
 
         const parsedMaterials = parseList(materials);
         const parsedColors = parseList(colors);
@@ -116,6 +131,7 @@ router.put('/:id', upload.array('images', 10), async (req, res) => {
             variants,
             stock: parseInt(stock) || 0,
             images: finalImages,
+            descriptionImages: finalDescriptionImages,
             isFeatured: isFeatured === 'true' || isFeatured === true
         });
 

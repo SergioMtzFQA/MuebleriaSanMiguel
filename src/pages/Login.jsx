@@ -10,12 +10,12 @@ const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        const success = login(username, password);
+        const success = await login(username, password);
         if (success) {
-            navigate('/admin');
+            navigate('/products');
         } else {
             setError('Credenciales inválidas');
         }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Landing from './pages/Landing';
@@ -10,11 +10,15 @@ import ProductDetail from './pages/ProductDetail';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminGuard from './components/AdminGuard';
 
 function App() {
+    const location = useLocation();
+    const isAdminRoute = location.pathname.startsWith('/products') || location.pathname.startsWith('/login');
+
     return (
         <div className="app-container">
-            <Navbar />
+            {!isAdminRoute && <Navbar />}
             <main>
                 <Routes>
                     <Route path="/" element={<Landing />} />
@@ -23,15 +27,17 @@ function App() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/product/:id" element={<ProductDetail />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/admin" element={
+                    <Route path="/products" element={
                         <ProtectedRoute>
-                            <Admin />
+                            <AdminGuard>
+                                <Admin />
+                            </AdminGuard>
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<Landing />} />
                 </Routes>
             </main>
-            <Footer />
+            {!isAdminRoute && <Footer />}
         </div>
     );
 }

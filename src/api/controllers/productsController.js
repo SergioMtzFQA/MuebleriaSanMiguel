@@ -3,9 +3,12 @@ import path from 'path';
 
 const parseList = (input) => {
     try {
-        return typeof input === 'string' ? JSON.parse(input) : input;
+        const parsed = typeof input === 'string' ? JSON.parse(input) : input;
+        return Array.isArray(parsed) ? parsed.map(item => String(item).toUpperCase()) : [];
     } catch (e) {
-        return typeof input === 'string' ? input.split(',').map(s => s.trim()).filter(s => s) : [];
+        return typeof input === 'string'
+            ? input.split(',').map(s => s.trim().toUpperCase()).filter(s => s)
+            : [];
     }
 };
 

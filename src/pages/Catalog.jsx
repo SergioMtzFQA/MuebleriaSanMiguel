@@ -10,7 +10,7 @@ const Catalog = () => {
     const [filter, setFilter] = useState('Todos');
 
     useEffect(() => {
-        fetch('/api/products')
+        fetch(`${import.meta.env.VITE_BASE_URL}/products`)
             .then(res => {
                 if (!res.ok) throw new Error('Error al cargar productos');
                 return res.json();

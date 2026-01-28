@@ -12,7 +12,7 @@ const About = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                 >
-                    <h2>Acerca de Nosotros</h2>
+                    <h2>¿Quienes somos?</h2>
                     <p className="lead">Mueblerias San Miguel: Tradición y Vanguardia en Diseño.</p>
                     <div className="about-grid">
                         <div className="about-text">

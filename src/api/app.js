@@ -18,6 +18,9 @@ app.use(bodyParser.json());
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
 // Routes
+import authRoutes from './routes/auth.js';
+app.use('/api/auth', authRoutes);
+
 import productsRouter from './routes/products.js';
 app.use('/api/products', productsRouter);
 

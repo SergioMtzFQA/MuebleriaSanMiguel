@@ -16,7 +16,7 @@ const ProductDetail = () => {
     const [zoomStyle, setZoomStyle] = useState({ transformOrigin: 'center center', transform: 'scale(1)' });
 
     useEffect(() => {
-        fetch('/api/products')
+        fetch(`${import.meta.env.VITE_BASE_URL}/products`)
             .then(res => res.json())
             .then(data => {
                 // Determine if ID is string based (timestamp) or number
@@ -69,6 +69,15 @@ const ProductDetail = () => {
 
                 <div className="product-main-content">
                     <motion.div
+                        className="product-description-side"
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                    >
+                        <h3>Descripción</h3>
+                        <p className="description">{product.description}</p>
+                    </motion.div>
+
+                    <motion.div
                         className="product-gallery"
                         initial={{ opacity: 0, x: -50 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -94,15 +103,6 @@ const ProductDetail = () => {
                                 ))}
                             </div>
                         )}
-                    </motion.div>
-
-                    <motion.div
-                        className="product-description-side"
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                    >
-                        <h3>Descripción</h3>
-                        <p className="description">{product.description}</p>
                     </motion.div>
                 </div>
 

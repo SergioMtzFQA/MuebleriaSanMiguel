@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import './Admin.css';
 
 const Admin = () => {
-    const { logout } = useAuth();
+    const { logout, getToken } = useAuth();
 
     // State
     const [products, setProducts] = useState([]);
@@ -26,7 +26,7 @@ const Admin = () => {
     // Fetch Products on load or after update
     const fetchProducts = () => {
         setLoading(true);
-        fetch('/api/products')
+        fetch(`${import.meta.env.VITE_BASE_URL}/products`)
             .then(res => res.json())
             .then(data => {
                 setProducts(data);
@@ -42,6 +42,8 @@ const Admin = () => {
         fetchProducts();
     }, []);
 
+    const [uploadProgress, setUploadProgress] = useState(0);
+
     // --- Handlers ---
 
     const handleCreateNew = () => {
@@ -55,6 +57,7 @@ const Admin = () => {
         setExistingDescriptionImages([]);
         setNewDescriptionImages([]);
         setMessage('');
+        setUploadProgress(0); // Reset progress
         setView('form');
     };
 
@@ -73,6 +76,7 @@ const Admin = () => {
         setNewImages([]);
         setNewDescriptionImages([]);
         setMessage('');
+        setUploadProgress(0); // Reset progress
         setView('form');
     };
 
@@ -80,7 +84,12 @@ const Admin = () => {
         if (!window.confirm('¿Seguro que deseas eliminar este producto?')) return;
 
         try {
-            const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/products/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${getToken()}`
+                }
+            });
             if (res.ok) {
                 fetchProducts(); // Refresh list
                 setMessage('Producto eliminado.');
@@ -98,7 +107,13 @@ const Admin = () => {
     };
 
     const handleNewImageChange = (e) => {
-        setNewImages(e.target.files);
+        if (e.target.files) {
+            setNewImages(prev => [...prev, ...Array.from(e.target.files)]);
+        }
+    };
+
+    const handleRemoveNewImage = (index) => {
+        setNewImages(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleRemoveExistingImage = (imgUrl) => {
@@ -133,6 +148,7 @@ const Admin = () => {
         e.preventDefault();
         setLoading(true);
         setMessage('');
+        setUploadProgress(0);
 
         const data = new FormData();
         data.append('name', formData.name);
@@ -165,26 +181,40 @@ const Admin = () => {
             data.append('descriptionImages', newDescriptionImages[i]);
         }
 
-        const url = editingId ? `/api/products/${editingId}` : '/api/products';
+        const url = editingId ? `${import.meta.env.VITE_BASE_URL}/products/${editingId}` : `${import.meta.env.VITE_BASE_URL}/products`;
         const method = editingId ? 'PUT' : 'POST';
 
-        try {
-            const res = await fetch(url, {
-                method: method,
-                body: data,
-            });
-            if (res.ok) {
+        // Use XMLHttpRequest for progress tracking
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Authorization', `Bearer ${getToken()}`);
+
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percentComplete = Math.round((event.loaded / event.total) * 100);
+                setUploadProgress(percentComplete);
+            }
+        };
+
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
                 setMessage(editingId ? 'Producto actualizado.' : 'Producto creado.');
                 fetchProducts(); // Refresh data
                 setTimeout(() => setView('list'), 1500); // Go back to list
             } else {
                 setMessage('Error al guardar.');
             }
-        } catch (error) {
-            setMessage('Error de red.');
-        } finally {
             setLoading(false);
-        }
+            setUploadProgress(0);
+        };
+
+        xhr.onerror = () => {
+            setMessage('Error de red.');
+            setLoading(false);
+            setUploadProgress(0);
+        };
+
+        xhr.send(data);
     };
 
     // --- Views ---
@@ -313,12 +343,40 @@ const Admin = () => {
                     <div className="file-input-wrapper">
                         <input type="file" onChange={handleNewImageChange} accept="image/*" multiple />
                         <div className="file-input-label">
-                            {newImages.length > 0
-                                ? `${newImages.length} archivo(s) seleccionado(s)`
-                                : 'Arrastra imágenes aquí o haz clic para seleccionar'}
+                            Arrastra imágenes aquí o haz clic para seleccionar
                         </div>
                     </div>
+                    {/* New Images Preview */}
+                    <div className="new-images-preview" style={{ marginTop: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        {newImages.map((file, idx) => (
+                            <div key={`new-main-${idx}`} className="image-preview" style={{ position: 'relative', width: '80px', height: '80px' }}>
+                                <img src={URL.createObjectURL(file)} alt="new-prev" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                                <button type="button" className="remove-img-btn" onClick={() => handleRemoveNewImage(idx)} style={{ position: 'absolute', top: -5, right: -5, background: 'red', color: 'white', borderRadius: '50%', border: 'none', width: '20px', height: '20px', cursor: 'pointer' }}>X</button>
+                            </div>
+                        ))}
+                    </div>
+                    {newImages.length > 0 && <small style={{ color: 'green', display: 'block', marginTop: '5px' }}>{newImages.length} imagen(es) seleccionada(s).</small>}
                 </div>
+
+                {uploadProgress > 0 && (
+                    <div className="progress-bar-container" style={{ margin: '20px 0', width: '100%', background: '#e0e0e0', borderRadius: '5px', overflow: 'hidden' }}>
+                        <div
+                            className="progress-bar"
+                            style={{
+                                width: `${uploadProgress}%`,
+                                background: '#4caf50',
+                                height: '20px',
+                                transition: 'width 0.2s',
+                                textAlign: 'center',
+                                color: 'white',
+                                fontSize: '12px',
+                                lineHeight: '20px'
+                            }}
+                        >
+                            {uploadProgress}%
+                        </div>
+                    </div>
+                )}
 
                 <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
                     {loading ? 'Guardando...' : (editingId ? 'Actualizar Producto' : 'Crear Producto')}

@@ -10,32 +10,49 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         // Check local storage for persistent login
-        const storedUser = localStorage.getItem('adminUser');
-        if (storedUser) {
+        const token = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
+        if (token && storedUser) {
             setUser(JSON.parse(storedUser));
         }
         setLoading(false);
     }, []);
 
-    const login = (username, password) => {
-        // Simple mock authentication for prototype
-        // In production, verify with backend API
-        if (username === 'admin' && password === 'admin123') {
-            const userData = { username: 'admin', role: 'admin' };
-            setUser(userData);
-            localStorage.setItem('adminUser', JSON.stringify(userData));
+    const login = async (username, password) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (!response.ok) {
+                return false;
+            }
+
+            const data = await response.json();
+            setUser(data.user);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
             return true;
+        } catch (error) {
+            console.error('Login failed:', error);
+            return false;
         }
-        return false;
     };
 
     const logout = () => {
         setUser(null);
-        localStorage.removeItem('adminUser');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
     };
 
+    const getToken = () => localStorage.getItem('token');
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, logout, loading, getToken }}>
             {!loading && children}
         </AuthContext.Provider>
     );

@@ -25,7 +25,7 @@ import productsRouter from './routes/products.js';
 app.use('/api/products', productsRouter);
 
 app.get('/', (req, res) => {
-    res.send('Muebleria San Miguel API Running (PostgreSQL Backend Structure)');
+    res.send('Sillas San Miguel API Running (PostgreSQL Backend Structure)');
 });
 
 export default app;

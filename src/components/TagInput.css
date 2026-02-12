@@ -1,0 +1,96 @@
+.tag-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    background-color: #fafafa;
+    min-height: 48px;
+    transition: all 0.2s ease;
+}
+
+.tags-list:focus-within {
+    border-color: var(--primary);
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.tag-item {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e0f2f1;
+    /* Light teal for tags */
+    color: #00695c;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.tag-remove-btn {
+    background: none;
+    border: none;
+    margin-left: 6px;
+    cursor: pointer;
+    color: #004d40;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.tag-remove-btn:hover {
+    opacity: 1;
+}
+
+.input-wrapper {
+    flex: 1;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.tag-input-field {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 1rem;
+    color: var(--text-main);
+    padding: 4px;
+}
+
+.tag-add-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.tag-add-btn:hover {
+    color: var(--primary);
+}
+
+.tag-add-btn:disabled {
+    color: #ccc;
+    cursor: default;
+}
+
+.tag-help-text {
+    font-size: 0.8rem;
+    color: #888;
+    margin-left: 4px;
+}

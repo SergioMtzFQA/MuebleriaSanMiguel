@@ -14,7 +14,7 @@ const parseList = (input) => {
 
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.findAll({ order: [['id', 'ASC']] });
+        const products = await Product.findAll({ order: [['createdAt', 'DESC']] });
         res.json(products);
     } catch (err) {
         console.error('Error fetching products:', err);

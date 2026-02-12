@@ -55,18 +55,24 @@
     height: 250px;
     position: relative;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    /* Optional: Ensure white background for transparent images */
 }
 
 .card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    /* Keep as backup */
     transition: transform 0.5s ease;
 }
 
-.product-card:hover .card-image img {
-    transform: scale(1.05);
-}
+/* Removed hover zoom */
 
 .badge-new {
     position: absolute;

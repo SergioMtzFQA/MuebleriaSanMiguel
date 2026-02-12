@@ -13,7 +13,7 @@ const About = () => {
                     viewport={{ once: true }}
                 >
                     <h2>¿Quienes somos?</h2>
-                    <p className="lead">Mueblerias San Miguel: Tradición y Vanguardia en Diseño.</p>
+                    <p className="lead">Sillas San Miguel: Tradición y Vanguardia en Diseño.</p>
                     <div className="about-grid">
                         <div className="about-text">
                             <p>

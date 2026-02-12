@@ -27,11 +27,13 @@
 }
 
 .product-main-content {
-    display: grid;
-    grid-template-columns: 0.8fr 1.2fr;
-    /* Image wider, description narrower */
-    gap: 50px;
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-bottom: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .product-description-side {
@@ -49,6 +51,40 @@
     font-size: 1.05rem;
     line-height: 1.7;
     color: var(--text-light);
+}
+
+.product-description-side .description ul,
+.product-description-side .description ol {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.product-description-side .description p {
+    margin-bottom: 10px;
+}
+
+.product-description-side .description img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product-description-side .description {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-light);
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.product-description-side .description pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.product-description-side .description strong {
+    font-weight: 600;
+    color: var(--text-dark);
 }
 
 .product-specs-container {
@@ -198,9 +234,6 @@
 
 @media (max-width: 768px) {
     .product-main-content {
-        grid-template-columns: 1fr;
-        display: flex;
-        flex-direction: column-reverse;
         gap: 20px;
     }
 
@@ -230,5 +263,24 @@
 
     .main-image-container {
         height: 350px;
+    }
+
+    .thumbnail-list {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .thumbnail-list img {
+        /* Show 3 items: (100% - 2 gaps of 10px) / 3 */
+        min-width: calc((100% - 20px) / 3);
+        width: calc((100% - 20px) / 3);
+        height: auto;
+        aspect-ratio: 1/1;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        object-fit: cover;
     }
 }

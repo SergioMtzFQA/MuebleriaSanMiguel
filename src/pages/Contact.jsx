@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { MapPin, Phone, Mail } from 'lucide-react';
 import './Contact.css';
 
 const ContactPage = () => {
@@ -18,19 +19,28 @@ const ContactPage = () => {
                             <h3>Información de Contacto</h3>
                             <p style={{ marginBottom: '1rem' }}>Estamos aquí para atenderte. Contáctanos para cotizaciones o dudas.</p>
 
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <strong>Dirección:</strong><br />
-                                Av. del Mueble 123, Zona Industrial, CDMX.
+                            {/* <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                                <MapPin size={24} style={{ minWidth: '24px', color: 'var(--secondary)' }} />
+                                <div>
+                                    <strong>Dirección:</strong><br />
+                                    Av. del Mueble 123, Zona Industrial, CDMX.
+                                </div>
+                            </div> */}
+
+                            <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                                <Phone size={24} style={{ minWidth: '24px', color: 'var(--secondary)' }} />
+                                <div>
+                                    <strong>Teléfono:</strong><br />
+                                    +52 555 123 4567
+                                </div>
                             </div>
 
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <strong>Teléfono:</strong><br />
-                                +52 555 123 4567
-                            </div>
-
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <strong>Email:</strong><br />
-                                ventas@mueblessanmiguel.com
+                            <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                                <Mail size={24} style={{ minWidth: '24px', color: 'var(--secondary)' }} />
+                                <div>
+                                    <strong>Email:</strong><br />
+                                    ventas@mueblessanmiguel.com
+                                </div>
                             </div>
                         </div>
 

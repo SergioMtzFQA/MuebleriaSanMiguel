@@ -69,15 +69,6 @@ const ProductDetail = () => {
 
                 <div className="product-main-content">
                     <motion.div
-                        className="product-description-side"
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                    >
-                        <h3>Descripción</h3>
-                        <p className="description">{product.description}</p>
-                    </motion.div>
-
-                    <motion.div
                         className="product-gallery"
                         initial={{ opacity: 0, x: -50 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -104,41 +95,53 @@ const ProductDetail = () => {
                             </div>
                         )}
                     </motion.div>
-                </div>
 
-                <div className="product-specs-container">
+                    <div className="product-specs-container">
+                        <motion.div
+                            className="specs-column left"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                        >
+                            {product.materials && product.materials.length > 0 && (
+                                <div className="materials-section">
+                                    <h4>Materiales</h4>
+                                    <ul>
+                                        {product.materials.map((m, i) => <li key={i}>{m}</li>)}
+                                    </ul>
+                                </div>
+                            )}
+                        </motion.div>
+
+                        <motion.div
+                            className="specs-column right"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                        >
+                            {product.variants && product.variants.length > 0 && (
+                                <div className="variants-section">
+                                    {product.variants.map((v) => (
+                                        <div key={v.name} className="materials-section">
+                                            <h4>{v.name === 'Color' ? 'Colores Disponibles' : v.name}</h4>
+                                            <ul>
+                                                {v.options.map((opt, i) => <li key={i}>{opt}</li>)}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </motion.div>
+                    </div>
+
                     <motion.div
-                        className="specs-column left"
-                        initial={{ opacity: 0, x: -20 }}
+                        className="product-description-side"
+                        initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
                     >
-                        {product.materials && product.materials.length > 0 && (
-                            <div className="materials-section">
-                                <h4>Materiales</h4>
-                                <ul>
-                                    {product.materials.map((m, i) => <li key={i}>{m}</li>)}
-                                </ul>
-                            </div>
-                        )}
-                    </motion.div>
-
-                    <motion.div
-                        className="specs-column right"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                    >
-                        {product.variants && product.variants.length > 0 && (
-                            <div className="variants-section">
-                                {product.variants.map((v) => (
-                                    <div key={v.name} className="materials-section">
-                                        <h4>{v.name === 'Color' ? 'Colores Disponibles' : v.name}</h4>
-                                        <ul>
-                                            {v.options.map((opt, i) => <li key={i}>{opt}</li>)}
-                                        </ul>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                        <h3>Descripción</h3>
+                        <div
+                            className="description"
+                            dangerouslySetInnerHTML={{ __html: product.description }}
+                        />
                     </motion.div>
                 </div>
 

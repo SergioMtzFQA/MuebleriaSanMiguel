@@ -6,7 +6,7 @@ const Footer = () => {
     return (
         <footer className="footer" id="contact">
             <div className="footer-bottom">
-                <p>&copy; {new Date().getFullYear()} Mueblerias San Miguel. Todos los derechos reservados.</p>
+                <p>&copy; {new Date().getFullYear()} Sillas San Miguel. Todos los derechos reservados.</p>
             </div>
         </footer>
     );

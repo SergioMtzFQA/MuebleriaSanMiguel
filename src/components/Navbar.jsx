@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -23,14 +24,12 @@ const Navbar = () => {
             <div className="container navbar-content">
                 <div className="logo">
                     <Link to="/" className="logo">
-                        <h2>Mueblerias San Miguel</h2>
+                        <h2>Sillas San Miguel</h2>
                     </Link>
                 </div>
 
                 <div className="menu-icon" onClick={toggleMenu}>
-                    <div className={`bar ${menuOpen ? 'open' : ''}`}></div>
-                    <div className={`bar ${menuOpen ? 'open' : ''}`}></div>
-                    <div className={`bar ${menuOpen ? 'open' : ''}`}></div>
+                    {menuOpen ? <X size={28} /> : <Menu size={28} />}
                 </div>
 
                 <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>

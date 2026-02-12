@@ -14,7 +14,12 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: {
+        fieldSize: 25 * 1024 * 1024 // 25MB
+    }
+});
 
 // Helper to parse comma or JSON list
 const parseList = (input) => {
@@ -28,7 +33,7 @@ const parseList = (input) => {
 // GET All
 router.get('/', async (req, res) => {
     try {
-        const products = await Product.findAll({ order: [['id', 'ASC']] });
+        const products = await Product.findAll({ order: [['createdAt', 'DESC']] });
         res.json(products);
     } catch (err) {
         console.error('Error fetching products:', err);

@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../components/Loader';
 import './Login.css';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (loading) return;
         setError('');
+        setLoading(true);
         const success = await login(username, password);
+
         if (success) {
             navigate('/products');
+            // Keep loading true while navigating
         } else {
+            setLoading(false);
             setError('Credenciales inválidas');
         }
     };
@@ -45,7 +52,9 @@ const Login = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary btn-block">Iniciar Sesión</button>
+                    <button type="submit" className="btn btn-primary btn-block" disabled={loading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+                        {loading ? <Loader size="small" /> : 'Iniciar Sesión'}
+                    </button>
                     <p className="hint">Usar: admin / admin123</p>
                 </form>
             </div>

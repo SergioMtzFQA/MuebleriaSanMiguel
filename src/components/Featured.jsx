@@ -3,6 +3,48 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import './Featured.css';
 
+const ProductCard = ({ product, index }) => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const images = product.images && product.images.length > 0 ? product.images : ['https://via.placeholder.com/400x300'];
+
+    useEffect(() => {
+        if (images.length <= 1) return;
+
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, [images.length]);
+
+    return (
+        <motion.div
+            className="product-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 }}
+        >
+            <Link to={`/product/${product.id}`}>
+                <div className="card-image">
+                    <img
+                        src={images[currentImageIndex]}
+                        alt={product.name}
+                        style={{ transition: 'opacity 0.5s ease-in-out' }} // Simple inline transition hint, though src swap is abrupt without double buffering
+                    />
+                    {/* You could add logic for 'New' badge based on date if desired */}
+                </div>
+                <div className="card-info">
+                    <span>{product.category}</span>
+                    <h3 style={{ fontSize: '1.2rem', margin: '10px 0' }}>{product.name}</h3>
+                    {/* Description removed as requested */}
+                    <span className="btn-link">Ver Detalles &rarr;</span>
+                </div>
+            </Link>
+        </motion.div>
+    );
+};
+
 const Featured = () => {
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -40,30 +82,7 @@ const Featured = () => {
 
                 <div className="products-grid">
                     {featuredProducts.map((product, index) => (
-                        <motion.div
-                            key={product.id}
-                            className="product-card"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                        >
-                            <Link to={`/product/${product.id}`}>
-                                <div className="card-image">
-                                    <img
-                                        src={product.images && product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/400x300'}
-                                        alt={product.name}
-                                    />
-                                    {/* You could add logic for 'New' badge based on date if desired */}
-                                </div>
-                                <div className="card-info">
-                                    <span>{product.category}</span>
-                                    <h3>{product.name}</h3>
-                                    <p className="description-truncate">{product.description}</p>
-                                    <span className="btn-link">Ver Detalles &rarr;</span>
-                                </div>
-                            </Link>
-                        </motion.div>
+                        <ProductCard key={product.id} product={product} index={index} />
                     ))}
                 </div>
             </div>

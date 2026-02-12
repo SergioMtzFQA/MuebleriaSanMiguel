@@ -28,6 +28,14 @@ const Catalog = () => {
     if (loading) return <div className="container" style={{ paddingTop: '100px' }}>Cargando productos...</div>;
     if (error) return <div className="container" style={{ paddingTop: '100px' }}>Error: {error}</div>;
 
+    if (products.length === 0) {
+        return (
+            <div className="container" style={{ paddingTop: '100px', textAlign: 'center' }}>
+                <h3>Estamos cargando los mejores productos del mercado, favor de volver mas tarde..</h3>
+            </div>
+        );
+    }
+
     // Derive categories from fetched data
     const categories = ['Todos', ...new Set(products.map(p => p.category))];
 

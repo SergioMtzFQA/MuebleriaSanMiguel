@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './Admin.css';
+import Toast from '../components/Toast';
+import Loader from '../components/Loader';
+import TagInput from '../components/TagInput'; // Import TagInput
+import CategoryInput from '../components/CategoryInput'; // Import CategoryInput
+import heic2any from 'heic2any'; // Import heic2any
+import { Edit2, Trash2, UploadCloud, Plus, Search, Filter } from 'lucide-react';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+
 
 const Admin = () => {
     const { logout, getToken } = useAuth();
@@ -9,19 +18,26 @@ const Admin = () => {
     const [products, setProducts] = useState([]);
     const [view, setView] = useState('list'); // 'list' | 'form'
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState('');
+    const [toast, setToast] = useState(null); // { message, type }
 
-    // Start of Admin.jsx modification
+    // List View State (Search & Filter)
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterCategory, setFilterCategory] = useState('');
+
     // Form State
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({
         name: '', category: '', description: '',
-        materials: '', colors: '', isFeatured: false
+        materials: [], // Changed to array
+        colors: [], // Changed to array
+        isFeatured: false
     });
     const [existingImages, setExistingImages] = useState([]); // URLs of images already on server
     const [newImages, setNewImages] = useState([]); // File objects for new uploads
     const [existingDescriptionImages, setExistingDescriptionImages] = useState([]);
     const [newDescriptionImages, setNewDescriptionImages] = useState([]);
+    const [isDragging, setIsDragging] = useState(false); // Drag & Drop visual state
+    const [isProcessing, setIsProcessing] = useState(false); // Processing HEIC state
 
     // Fetch Products on load or after update
     const fetchProducts = () => {
@@ -44,38 +60,84 @@ const Admin = () => {
 
     const [uploadProgress, setUploadProgress] = useState(0);
 
+    // --- Helper: Process Files (HEIC -> JPEG) ---
+    const processFiles = async (files) => {
+        setIsProcessing(true);
+        const processedFiles = [];
+
+        for (const file of files) {
+            if (file.type === 'image/heic' || file.type === 'image/heif' || file.name.toLowerCase().endsWith('.heic')) {
+                try {
+                    const convertedBlob = await heic2any({
+                        blob: file,
+                        toType: 'image/jpeg',
+                        quality: 0.8
+                    });
+
+                    // heic2any returns a Blob or Blob[], force array to handle simple
+                    const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+
+                    const newFile = new File([blob], file.name.replace(/\.(heic|HEIC)$/, '.jpg'), {
+                        type: 'image/jpeg',
+                        lastModified: new Date().getTime()
+                    });
+                    processedFiles.push(newFile);
+                } catch (error) {
+                    console.error("Error converting HEIC:", error);
+                    setToast({ message: `Error al convertir ${file.name}. Se omitió.`, type: 'error' });
+                }
+            } else {
+                processedFiles.push(file);
+            }
+        }
+        setIsProcessing(false);
+        return processedFiles;
+    };
+
     // --- Handlers ---
 
     const handleCreateNew = () => {
         setEditingId(null);
         setFormData({
             name: '', category: '', description: '',
-            materials: '', colors: '', isFeatured: false
+            materials: [], colors: [], isFeatured: false
         });
         setExistingImages([]);
         setNewImages([]);
         setExistingDescriptionImages([]);
         setNewDescriptionImages([]);
-        setMessage('');
+        setToast(null);
         setUploadProgress(0); // Reset progress
         setView('form');
     };
 
     const handleEdit = (product) => {
         setEditingId(product.id);
+
+        // Parse materials/colors if they are strings (legacy support)
+        let materials = product.materials || [];
+        if (typeof materials === 'string') {
+            materials = materials.split(',').map(s => s.trim()).filter(Boolean);
+        }
+
+        let colors = product.variants && product.variants[0] ? product.variants[0].options : [];
+        if (typeof colors === 'string') { // Fallback if somehow string in DB
+            colors = colors.split(',').map(s => s.trim()).filter(Boolean);
+        }
+
         setFormData({
             name: product.name,
             category: product.category,
             description: product.description,
-            materials: Array.isArray(product.materials) ? product.materials.join(', ') : product.materials,
-            colors: product.variants && product.variants[0] ? product.variants[0].options.join(', ') : '',
+            materials: materials,
+            colors: colors,
             isFeatured: product.isFeatured || false
         });
         setExistingImages(product.images || []);
         setExistingDescriptionImages(product.descriptionImages || []);
         setNewImages([]);
         setNewDescriptionImages([]);
-        setMessage('');
+        setToast(null);
         setUploadProgress(0); // Reset progress
         setView('form');
     };
@@ -92,23 +154,43 @@ const Admin = () => {
             });
             if (res.ok) {
                 fetchProducts(); // Refresh list
-                setMessage('Producto eliminado.');
+                setToast({ message: 'Producto eliminado correctamente', type: 'success' });
             } else {
-                alert('Error al eliminar');
+                setToast({ message: 'Error al eliminar el producto', type: 'error' });
             }
         } catch (e) {
-            alert('Error de red');
+            setToast({ message: 'Error de red', type: 'error' });
         }
     };
 
     const handleFormChange = (e) => {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+
+        // Limit Featured Products to 10
+        if (e.target.name === 'isFeatured' && value === true) {
+            const currentFeaturedCount = products.filter(p => p.isFeatured).length;
+            // If we are editing, check if this product was ALREADY featured. 
+            // If it was, don't count it as a "new" addition.
+            const isAlreadyFeatured = editingId && products.find(p => p.id === editingId)?.isFeatured;
+
+            if (currentFeaturedCount >= 10 && !isAlreadyFeatured) {
+                alert('Solo puedes tener un máximo de 10 productos destacados. Desmarca uno existente para destacar este.');
+                return; // Prevent change
+            }
+        }
+
         setFormData({ ...formData, [e.target.name]: value });
     };
 
-    const handleNewImageChange = (e) => {
+    const handleTagsChange = (field, newTags) => {
+        setFormData(prev => ({ ...prev, [field]: newTags }));
+    };
+
+    const handleNewImageChange = async (e) => {
         if (e.target.files) {
-            setNewImages(prev => [...prev, ...Array.from(e.target.files)]);
+            const rawFiles = Array.from(e.target.files);
+            const processed = await processFiles(rawFiles);
+            setNewImages(prev => [...prev, ...processed]);
         }
     };
 
@@ -120,19 +202,60 @@ const Admin = () => {
         setExistingImages(prev => prev.filter(url => url !== imgUrl));
     };
 
+    // Drag & Drop Handlers
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+
+    const handleDrop = async (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            // Filter for images only (including heic/heif)
+            const imageFiles = Array.from(e.dataTransfer.files).filter(file =>
+                file.type.startsWith('image/') ||
+                file.name.toLowerCase().endsWith('.heic') ||
+                file.name.toLowerCase().endsWith('.heif')
+            );
+
+            if (imageFiles.length > 0) {
+                const processed = await processFiles(imageFiles);
+                setNewImages(prev => [...prev, ...processed]);
+            } else {
+                alert("Solo se permiten archivos de imagen.");
+            }
+        }
+    };
+
+
     // Description Image Handlers
-    const handlePaste = (e) => {
+    const handlePaste = async (e) => {
         const items = (e.clipboardData || e.originalEvent.clipboardData).items;
         let files = [];
         for (let index in items) {
             const item = items[index];
-            if (item.kind === 'file' && item.type.startsWith('image/')) {
+            if (item.kind === 'file') {
                 const blob = item.getAsFile();
-                files.push(blob);
+                if (blob.type.startsWith('image/') || blob.name.toLowerCase().endsWith('.heic')) {
+                    files.push(blob);
+                }
             }
         }
         if (files.length > 0) {
-            setNewDescriptionImages(prev => [...prev, ...files]);
+            const processed = await processFiles(files);
+
+            const currentTotal = existingDescriptionImages.length + newDescriptionImages.length;
+            if (currentTotal + processed.length > 10) {
+                alert('No se pueden adjuntar mas de 10 imagenes en la descripcion');
+                return;
+            }
+            setNewDescriptionImages(prev => [...prev, ...processed]);
         }
     };
 
@@ -146,8 +269,9 @@ const Admin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (loading || isProcessing) return;
         setLoading(true);
-        setMessage('');
+        setToast(null);
         setUploadProgress(0);
 
         const data = new FormData();
@@ -155,9 +279,11 @@ const Admin = () => {
         data.append('category', formData.category);
         data.append('price', '0'); // Default price
         data.append('description', formData.description);
-        // Be flexible with comma separated lists
-        data.append('materials', JSON.stringify(formData.materials.toString().split(',').map(s => s.trim())));
-        data.append('colors', JSON.stringify(formData.colors.toString().split(',').map(s => s.trim())));
+
+        // JSON stringify the arrays
+        data.append('materials', JSON.stringify(formData.materials));
+        data.append('colors', JSON.stringify(formData.colors));
+
         data.append('stock', '0'); // Default stock
         data.append('isFeatured', formData.isFeatured);
 
@@ -198,18 +324,21 @@ const Admin = () => {
 
         xhr.onload = () => {
             if (xhr.status >= 200 && xhr.status < 300) {
-                setMessage(editingId ? 'Producto actualizado.' : 'Producto creado.');
+                setToast({ message: editingId ? 'Producto actualizado correctamente' : 'Producto creado exitosamente', type: 'success' });
                 fetchProducts(); // Refresh data
-                setTimeout(() => setView('list'), 1500); // Go back to list
+                setTimeout(() => {
+                    setView('list');
+                    setLoading(false); // Only stop loading after view change
+                }, 1500);
             } else {
-                setMessage('Error al guardar.');
+                setToast({ message: 'Hubo un error al guardar los cambios', type: 'error' });
+                setLoading(false); // Stop loading on error
             }
-            setLoading(false);
             setUploadProgress(0);
         };
 
         xhr.onerror = () => {
-            setMessage('Error de red.');
+            setToast({ message: 'Error de red. Verifica tu conexión.', type: 'error' });
             setLoading(false);
             setUploadProgress(0);
         };
@@ -219,43 +348,82 @@ const Admin = () => {
 
     // --- Views ---
 
-    const renderList = () => (
-        <div className="product-list-view">
-            <div className="list-actions">
-                <button className="btn btn-primary" onClick={handleCreateNew}>+ Nuevo Producto</button>
-            </div>
-            <table className="admin-table">
-                <thead>
-                    <tr>
-                        <th>Img</th>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map(p => (
-                        <tr key={p.id}>
-                            <td>
-                                <img
-                                    src={p.images && p.images[0] ? p.images[0] : 'https://via.placeholder.com/50'}
-                                    alt="thumb"
-                                    className="table-thumb"
-                                />
-                            </td>
-                            <td>{p.name}</td>
-                            <td>{p.category}</td>
-                            <td>
-                                <button className="btn-icon edit" onClick={() => handleEdit(p)}>✏️</button>
-                                <button className="btn-icon delete" onClick={() => handleDelete(p.id)}>🗑️</button>
-                            </td>
+    // Derived State
+    const uniqueCategories = [...new Set(products.map(p => p.category))].filter(Boolean).sort();
+
+    const renderList = () => {
+        // Filter Logic
+        const filteredProducts = products.filter(p => {
+            const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesCategory = filterCategory ? p.category === filterCategory : true;
+            return matchesSearch && matchesCategory;
+        }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        return (
+            <div className="product-list-view">
+                <div className="list-actions-bar">
+                    <div className="search-filter-container">
+                        <div className="search-box">
+                            <Search size={18} className="search-icon" />
+                            <input
+                                type="text"
+                                placeholder="Buscar producto..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                        <div className="filter-box">
+                            <Filter size={18} className="filter-icon" />
+                            <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+                                <option value="">Todas las categorías</option>
+                                {uniqueCategories.map(c => (
+                                    <option key={c} value={c}>{c}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <button className="btn btn-primary" onClick={handleCreateNew}>
+                        <Plus size={20} style={{ marginRight: '8px' }} />
+                        Nuevo Producto
+                    </button>
+                </div>
+                <table className="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
                         </tr>
-                    ))}
-                    {products.length === 0 && <tr><td colSpan="4" style={{ textAlign: 'center' }}>No hay productos.</td></tr>}
-                </tbody>
-            </table>
-        </div>
-    );
+                    </thead>
+                    <tbody>
+                        {filteredProducts.map(p => (
+                            <tr key={p.id}>
+                                <td>
+                                    <img
+                                        src={p.images && p.images[0] ? p.images[0] : 'https://via.placeholder.com/50'}
+                                        alt="thumb"
+                                        className="table-thumb"
+                                    />
+                                </td>
+                                <td>{p.name}</td>
+                                <td>{p.category}</td>
+                                <td>
+                                    <button className="btn-icon edit" onClick={() => handleEdit(p)} title="Editar">
+                                        <Edit2 size={18} />
+                                    </button>
+                                    <button className="btn-icon delete" onClick={() => handleDelete(p.id)} title="Eliminar">
+                                        <Trash2 size={18} />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        {filteredProducts.length === 0 && <tr><td colSpan="4" style={{ textAlign: 'center' }}>No se encontraron productos.</td></tr>}
+                    </tbody>
+                </table>
+            </div>
+        );
+    };
 
     const renderForm = () => (
         <div className="product-form-view">
@@ -263,26 +431,45 @@ const Admin = () => {
             <h2>{editingId ? 'Editar Producto' : 'Nuevo Producto'}</h2>
 
             <form onSubmit={handleSubmit} className="admin-form">
-                <div className="form-group">
-                    <label>Nombre</label>
-                    <input name="name" value={formData.name} onChange={handleFormChange} required />
+                <div className="form-group-row">
+                    <div className="form-group">
+                        <label>Nombre</label>
+                        <input name="name" value={formData.name} onChange={handleFormChange} required />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Categoría</label>
+                        <CategoryInput
+                            value={formData.category}
+                            onChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
+                            suggestions={uniqueCategories}
+                            placeholder="Escribe o selecciona..."
+                        />
+                    </div>
                 </div>
 
                 <div className="form-group">
-                    <label>Categoría</label>
-                    <input name="category" value={formData.category} onChange={handleFormChange} required />
-                </div>
-
-                <div className="form-group">
-                    <label>Descripción (Pega imágenes aquí)</label>
-                    <textarea
-                        name="description"
+                    <label>Descripción</label>
+                    <ReactQuill
+                        theme="snow"
                         value={formData.description}
-                        onChange={handleFormChange}
-                        onPaste={handlePaste}
-                        required
-                        rows="5"
-                        placeholder="Escribe la descripción del producto. Puedes pegar imágenes (Ctrl+V) directamente aquí."
+                        onChange={(content) => setFormData({ ...formData, description: content })}
+                        modules={{
+                            toolbar: [
+                                [{ 'header': [1, 2, 3, false] }],
+                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                ['link', 'image'],
+                                ['clean']
+                            ],
+                        }}
+                        formats={[
+                            'header',
+                            'bold', 'italic', 'underline', 'strike', 'blockquote',
+                            'list', 'bullet',
+                            'link', 'image'
+                        ]}
+                        placeholder="Escribe la descripción del producto..."
                     />
                     {/* Description Images Preview */}
                     <div className="desc-images-preview" style={{ marginTop: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
@@ -315,13 +502,21 @@ const Admin = () => {
                 </div>
 
                 <div className="form-group">
-                    <label>Materiales (separados por coma)</label>
-                    <input name="materials" value={formData.materials} onChange={handleFormChange} placeholder="Ej: Madera de roble, Tela premium..." />
+                    <label>Materiales</label>
+                    <TagInput
+                        tags={formData.materials}
+                        onTagsChange={(newTags) => handleTagsChange('materials', newTags)}
+                        placeholder="Escribe un material y presiona Enter..."
+                    />
                 </div>
 
                 <div className="form-group">
-                    <label>Colores (separados por coma)</label>
-                    <input name="colors" value={formData.colors} onChange={handleFormChange} placeholder="Ej: Rojo, Azul, Beige..." />
+                    <label>Colores</label>
+                    <TagInput
+                        tags={formData.colors}
+                        onTagsChange={(newTags) => handleTagsChange('colors', newTags)}
+                        placeholder="Escribe un color y presiona Enter..."
+                    />
                 </div>
 
                 {/* Image Management */}
@@ -340,10 +535,18 @@ const Admin = () => {
 
                 <div className="form-group">
                     <label>Agregar Nuevas Imágenes del Producto</label>
-                    <div className="file-input-wrapper">
-                        <input type="file" onChange={handleNewImageChange} accept="image/*" multiple />
+                    {isProcessing && <div style={{ marginBottom: '10px', color: '#f39c12' }}>Procesando imágenes (convirtiendo HEIC)...</div>}
+                    <div
+                        className={`file-input-wrapper ${isDragging ? 'dragging' : ''}`}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                    >
+                        <input type="file" onChange={handleNewImageChange} accept="image/*,.heic,.heif" multiple />
                         <div className="file-input-label">
-                            Arrastra imágenes aquí o haz clic para seleccionar
+                            <UploadCloud size={24} style={{ marginBottom: '10px', color: 'var(--text-light)' }} />
+                            <br />
+                            {isDragging ? 'Suelta las imágenes aquí' : 'Arrastra imágenes (JPG, PNG, HEIC) aquí'}
                         </div>
                     </div>
                     {/* New Images Preview */}
@@ -378,12 +581,13 @@ const Admin = () => {
                     </div>
                 )}
 
-                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-                    {loading ? 'Guardando...' : (editingId ? 'Actualizar Producto' : 'Crear Producto')}
+                <button type="submit" className="btn btn-primary btn-block" disabled={loading || isProcessing} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+                    {loading || isProcessing ? <Loader size="small" /> : (editingId ? 'Actualizar Producto' : 'Crear Producto')}
                 </button>
             </form>
         </div>
     );
+
 
     return (
         <div className="admin-page container">
@@ -395,7 +599,13 @@ const Admin = () => {
                 </div>
             </div>
 
-            {message && <div className={`alert ${message.includes('Error') ? 'alert-error' : 'alert-success'}`}>{message}</div>}
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
 
             {view === 'list' ? renderList() : renderForm()}
         </div>

@@ -16,7 +16,7 @@ const AboutPage = () => {
                         style={{ textAlign: 'center' }}
                     >
                         <h2>Acerca de Nosotros</h2>
-                        <p className="lead">Mueblerias San Miguel: Tradición y Vanguardia en Diseño.</p>
+                        <p className="lead">Sillas San Miguel: Tradición y Vanguardia en Diseño.</p>
                         <div className="about-grid">
                             <div className="about-text" style={{ width: '100%', maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
                                 <p style={{ textAlign: 'center', display: 'block' }}>

@@ -2,19 +2,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap');
 
 :root {
-    /* Colors */
-    --primary: #121212;
-    /* Very dark grey/black */
-    --secondary: #D4AF37;
-    /* Metallic Gold */
-    --secondary-light: #F4Cf57;
-    --bg-color: #FAFAFA;
-    /* Off-white background */
+    /* Colors - Neutral Palette */
+    --primary: #2C2C2C;
+    /* Soft Charcoal Black */
+    --secondary: #8B5E3C;
+    /* Warm Wood Tone */
+    --secondary-light: #D2B48C;
+    /* Light Wood/Tan */
+    --bg-color: #F9F9F9;
+    /* Clean Off-White */
     --surface: #FFFFFF;
-    /* Pure white for cards */
-    --text-main: #2C2C2C;
+    /* Pure White */
+    --text-main: #333333;
+    /* Dark Grey for text */
     --text-light: #666666;
+    /* Medium Grey */
     --text-inverse: #FFFFFF;
+    /* White text */
+    --border-color: #E5E5E5;
+    /* Light Grey Border */
 
     /* Typography */
     --font-heading: 'Outfit', sans-serif;
@@ -23,10 +29,17 @@
     /* Spacing & Layout */
     --container-width: 1200px;
     --header-height: 80px;
-    --radius: 12px;
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
-    --transition: all 0.3s ease;
+    --radius: 8px;
+    /* Slightly sharper for elegance */
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+    /* Softer shadow */
+    --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Smooth Transition */
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 * {
@@ -87,6 +100,13 @@ button {
     cursor: pointer;
     border: none;
     outline: none;
+}
+
+button:disabled,
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .container {

@@ -1,0 +1,105 @@
+.category-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.category-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.category-input-field {
+    width: 100%;
+    padding: 14px 16px;
+    padding-right: 40px;
+    /* Space for chevron */
+    border: 2px solid #eee;
+    background-color: #fafafa;
+    border-radius: 10px;
+    font-family: var(--font-body, sans-serif);
+    font-size: 1rem;
+    color: var(--text-main, #333);
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.category-input-field:hover {
+    border-color: #e0e0e0;
+    background-color: #fff;
+}
+
+.category-input-field:focus {
+    border-color: var(--primary, #d35400);
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.category-input-icon {
+    position: absolute;
+    right: 14px;
+    color: #999;
+    pointer-events: none;
+    transition: transform 0.2s;
+}
+
+.category-input-icon.open {
+    transform: rotate(180deg);
+}
+
+.category-suggestions-list {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    list-style: none;
+    padding: 5px;
+    margin: 0;
+    animation: fadeIn 0.1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.category-suggestion-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 6px;
+    color: #333;
+    font-size: 0.95rem;
+    transition: background 0.1s;
+}
+
+.category-suggestion-item:hover {
+    background-color: #f5f5f5;
+    color: var(--primary, #d35400);
+}
+
+.category-suggestion-item.active {
+    background-color: #fff3e0;
+    color: var(--primary, #d35400);
+    font-weight: 600;
+}
+
+.no-suggestions {
+    padding: 10px 15px;
+    color: #999;
+    font-size: 0.9rem;
+    text-align: center;
+}

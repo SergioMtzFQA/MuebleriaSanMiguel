@@ -37,7 +37,7 @@ const Hero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                 >
-                    <Link to="/catalog" className="btn btn-primary">Ver Catálogo</Link>
+                    <Link to="/catalog" className="btn btn-yellow">Ver Catálogo</Link>
                 </motion.div>
             </div>
         </section>

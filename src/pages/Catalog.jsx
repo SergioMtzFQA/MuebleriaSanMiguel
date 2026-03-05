@@ -10,7 +10,7 @@ const Catalog = () => {
     const [filter, setFilter] = useState('Todos');
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_BASE_URL}/products`)
+        fetch('/api/products')
             .then(res => {
                 if (!res.ok) throw new Error('Error al cargar productos');
                 return res.json();
@@ -31,7 +31,7 @@ const Catalog = () => {
     if (products.length === 0) {
         return (
             <div className="container" style={{ paddingTop: '100px', textAlign: 'center' }}>
-                <h3>Estamos cargando los mejores productos del mercado, favor de volver mas tarde..</h3>
+                <h3>Productos no cargados, vuelve mas tarde....</h3>
             </div>
         );
     }

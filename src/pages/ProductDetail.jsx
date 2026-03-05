@@ -16,7 +16,7 @@ const ProductDetail = () => {
     const [zoomStyle, setZoomStyle] = useState({ transformOrigin: 'center center', transform: 'scale(1)' });
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_BASE_URL}/products`)
+        fetch('/api/products')
             .then(res => res.json())
             .then(data => {
                 // Determine if ID is string based (timestamp) or number

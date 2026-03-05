@@ -50,7 +50,7 @@ const Featured = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_BASE_URL}/products`)
+        fetch('/api/products')
             .then(res => res.json())
             .then(data => {
                 const featured = data.filter(p => p.isFeatured === true || p.isFeatured === 'true');

@@ -42,7 +42,7 @@ const Admin = () => {
     // Fetch Products on load or after update
     const fetchProducts = () => {
         setLoading(true);
-        fetch(`${import.meta.env.VITE_BASE_URL}/products`)
+        fetch('/api/products')
             .then(res => res.json())
             .then(data => {
                 setProducts(data);
@@ -146,7 +146,7 @@ const Admin = () => {
         if (!window.confirm('¿Seguro que deseas eliminar este producto?')) return;
 
         try {
-            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/products/${id}`, {
+            const res = await fetch(`/api/products/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${getToken()}`
@@ -307,7 +307,7 @@ const Admin = () => {
             data.append('descriptionImages', newDescriptionImages[i]);
         }
 
-        const url = editingId ? `${import.meta.env.VITE_BASE_URL}/products/${editingId}` : `${import.meta.env.VITE_BASE_URL}/products`;
+        const url = editingId ? `/api/products/${editingId}` : '/api/products';
         const method = editingId ? 'PUT' : 'POST';
 
         // Use XMLHttpRequest for progress tracking

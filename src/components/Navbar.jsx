@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import Logo from './Logo';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -24,7 +25,7 @@ const Navbar = () => {
             <div className="container navbar-content">
                 <div className="logo">
                     <Link to="/" className="logo">
-                        <h2>Sillas San Miguel</h2>
+                        <Logo className="navbar-logo" />
                     </Link>
                 </div>
 
@@ -34,7 +35,6 @@ const Navbar = () => {
 
                 <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
                     <li><Link to="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
-                    <li><Link to="/catalog" onClick={() => setMenuOpen(false)}>Catálogo</Link></li>
                     <li><Link to="/about" onClick={() => setMenuOpen(false)}>Nosotros</Link></li>
                     <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contacto</Link></li>
                 </ul>

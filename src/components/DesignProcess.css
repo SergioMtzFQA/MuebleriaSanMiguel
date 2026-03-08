@@ -1,0 +1,109 @@
+.design-process {
+    position: relative;
+    background-color: var(--primary);
+    color: var(--surface);
+    overflow: hidden;
+}
+
+.blueprint-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Subtle geometric/blueprint texture generation using gradients */
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+.process-content {
+    position: relative;
+    z-index: 2;
+}
+
+.process-header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.process-subtitle {
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.process-header h2 {
+    color: var(--surface);
+    font-size: 3rem;
+    margin-bottom: 24px;
+}
+
+.header-line {
+    width: 60px;
+    height: 1px;
+    background-color: var(--surface);
+    margin: 0 auto;
+    opacity: 0.3;
+}
+
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.process-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 50px 40px;
+    transition: var(--transition);
+    border-radius: 2px;
+}
+
+.process-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    color: var(--accent);
+    opacity: 0.5;
+    margin-bottom: 24px;
+    line-height: 1;
+}
+
+.process-card h3 {
+    color: var(--surface);
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+}
+
+.process-card p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+@media (max-width: 992px) {
+    .process-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .process-header h2 {
+        font-size: 2.2rem;
+    }
+}

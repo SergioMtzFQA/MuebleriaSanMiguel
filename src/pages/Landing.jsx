@@ -1,13 +1,19 @@
 import React from 'react';
 import Hero from '../components/Hero';
-import Featured from '../components/Featured';
-import About from '../components/About';
+import FeaturedGallery from '../components/FeaturedGallery';
+import DesignProcess from '../components/DesignProcess';
+import Collections from '../components/Collections';
+import AboutSummary from '../components/AboutSummary';
 
 const Landing = () => {
     return (
         <div className="landing-page">
             <Hero />
-            <Featured />
+            <DesignProcess />
+            <AboutSummary />
+            {/* <Collections /> */}
+            <FeaturedGallery />
+
         </div>
     );
 };

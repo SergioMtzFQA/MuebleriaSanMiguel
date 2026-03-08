@@ -1,0 +1,142 @@
+.featured-gallery-section {
+    background-color: var(--surface);
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.featured-gallery-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.gallery-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Main Image View */
+.gallery-main-view {
+    position: relative;
+    width: 100%;
+    /* Aspect ratio for the big image. Usually 16:9 or similar is pleasant for interior shots */
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: #f0f0f0;
+    /* placeholder bg */
+    box-shadow: var(--shadow-md);
+}
+
+.main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Navigation Arrows */
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-dark);
+    transition: var(--transition);
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-arrow:hover {
+    background: #ffffff;
+    color: var(--primary);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.nav-arrow.prev {
+    left: 20px;
+}
+
+.nav-arrow.next {
+    right: 20px;
+}
+
+/* Thumbnails */
+.gallery-thumbnails {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    /* Allow horizontal scroll on mobile if needed */
+    padding: 8px 4px;
+    /* padding for focus shadows */
+    /* hide scrollbar for cleaner look */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.gallery-thumbnails::-webkit-scrollbar {
+    display: none;
+}
+
+.thumbnail-btn {
+    flex: 0 0 calc((100% - 60px) / 6);
+    /* 6 thumbnails minus 5 gaps (5*12=60) */
+    aspect-ratio: 16 / 10;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    background: none;
+    transition: var(--transition);
+    opacity: 0.6;
+}
+
+.thumbnail-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.thumbnail-btn:hover {
+    opacity: 0.9;
+}
+
+.thumbnail-btn.active {
+    opacity: 1;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+    /* subtle gold glow */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-arrow {
+        width: 36px;
+        height: 36px;
+    }
+
+    .nav-arrow.prev {
+        left: 10px;
+    }
+
+    .nav-arrow.next {
+        right: 10px;
+    }
+
+    .thumbnail-btn {
+        flex: 0 0 calc(33.333% - 8px);
+        /* Switch to showing ~3 at a time on small screens so they don't get tiny */
+    }
+}

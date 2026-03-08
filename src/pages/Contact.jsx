@@ -17,21 +17,22 @@ const ContactPage = () => {
                     <div className="contact-grid">
                         <div className="contact-info">
                             <h3>Información de Contacto</h3>
-                            <p style={{ marginBottom: '1rem' }}>Estamos aquí para atenderte. Contáctanos para cotizaciones o dudas.</p>
+                            <p style={{ marginBottom: '1rem' }}>Estamos aqui para atenderte. Contáctanos para cotizaciones o dudas.</p>
 
-                            {/* <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                            <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                                 <MapPin size={24} style={{ minWidth: '24px', color: 'var(--secondary)' }} />
                                 <div>
                                     <strong>Dirección:</strong><br />
-                                    Av. del Mueble 123, Zona Industrial, CDMX.
+                                    Prol. Fidel Velázquez 1320 Col. San Felipe, Linares, Nuevo León, México
+                                    C.P. 67714
                                 </div>
-                            </div> */}
+                            </div>
 
                             <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                                 <Phone size={24} style={{ minWidth: '24px', color: 'var(--secondary)' }} />
                                 <div>
                                     <strong>Teléfono:</strong><br />
-                                    +52 555 123 4567
+                                    +52 811 938 9548
                                 </div>
                             </div>
 
@@ -39,7 +40,7 @@ const ContactPage = () => {
                                 <Mail size={24} style={{ minWidth: '24px', color: 'var(--secondary)' }} />
                                 <div>
                                     <strong>Email:</strong><br />
-                                    ventas@mueblessanmiguel.com
+                                    humega75@gmail.com
                                 </div>
                             </div>
                         </div>

@@ -1,0 +1,122 @@
+.about-summary {
+    background-color: var(--surface);
+    overflow: hidden;
+}
+
+.about-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-text h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-light);
+    margin-bottom: 12px;
+}
+
+.about-text .subtitle {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 30px;
+    font-family: var(--font-heading);
+    font-weight: 400;
+}
+
+.about-text p {
+    color: var(--text-light);
+    margin-bottom: 24px;
+    font-size: 1.05rem;
+}
+
+.about-text p.lead {
+    font-size: 1.25rem;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.mt-4 {
+    margin-top: 40px;
+}
+
+.btn-outlined {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    background: transparent;
+}
+
+.btn-outlined:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.about-image-wrapper {
+    position: relative;
+    padding-left: 40px;
+}
+
+.about-image-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    width: 60%;
+    height: 100%;
+    background-color: var(--bg-color);
+    z-index: 0;
+}
+
+.image-frame {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow: var(--shadow-md);
+}
+
+.image-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+}
+
+.image-frame:hover img {
+    transform: scale(1.05);
+}
+
+@media (max-width: 992px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+
+    .about-text .subtitle {
+        font-size: 2rem;
+    }
+
+    .about-image-wrapper {
+        padding-left: 0;
+    }
+
+    .about-image-wrapper::before {
+        display: none;
+    }
+}

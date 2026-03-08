@@ -1,45 +1,35 @@
 /* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
 
 :root {
-    /* Colors - Neutral Palette */
-    --primary: #2C2C2C;
-    /* Soft Charcoal Black */
-    --secondary: #8B5E3C;
-    /* Warm Wood Tone */
-    --secondary-light: #D2B48C;
-    /* Light Wood/Tan */
-    --bg-color: #F9F9F9;
-    /* Clean Off-White */
-    --surface: #FFFFFF;
-    /* Pure White */
-    --text-main: #333333;
-    /* Dark Grey for text */
+    /* Colors - Premium Minimalist Palette */
+    --primary: #121212; /* Deep Charcoal */
+    --secondary: #2a2a2a; /* Lighter Charcoal */
+    --accent: #d4af37; /* Very subtle muted gold/brass for premium feel, used sparingly */
+    --bg-color: #fafafa; /* Minimal off-white */
+    --surface: #ffffff;
+    --text-main: #1a1a1a;
     --text-light: #666666;
-    /* Medium Grey */
-    --text-inverse: #FFFFFF;
-    /* White text */
-    --border-color: #E5E5E5;
-    /* Light Grey Border */
+    --text-inverse: #ffffff;
+    --border-color: #eaeaea;
 
     /* Typography */
-    --font-heading: 'Outfit', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --font-heading: 'Playfair Display', serif; /* Elegant, premium headings */
+    --font-body: 'Inter', sans-serif; /* Clean, modern body */
 
     /* Spacing & Layout */
-    --container-width: 1200px;
+    --container-width: 1280px;
     --header-height: 80px;
-    --radius: 8px;
-    /* Slightly sharper for elegance */
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
-    /* Softer shadow */
-    --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.08);
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    /* Smooth Transition */
+    --radius: 4px; /* Minimalist sharp/slight rounded corners */
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.06);
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Apple-like smooth transition */
 }
 
+/* Base Styles */
 html {
     scroll-behavior: smooth;
+    font-size: 16px;
 }
 
 * {
@@ -48,17 +38,13 @@ html {
     padding: 0;
 }
 
-html,
-body {
-    height: 100%;
-}
-
 body {
     font-family: var(--font-body);
     background-color: var(--bg-color);
     color: var(--text-main);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -78,15 +64,13 @@ main {
     flex: 1;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     color: var(--primary);
     line-height: 1.2;
+    font-weight: 400; /* Minimalist prefers lighter weights for elegance */
+    letter-spacing: -0.02em;
 }
 
 a {
@@ -96,82 +80,67 @@ a {
 }
 
 button {
-    font-family: var(--font-heading);
+    font-family: var(--font-body);
     cursor: pointer;
     border: none;
     outline: none;
 }
 
-button:disabled,
-.btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
 .container {
     max-width: var(--container-width);
     margin: 0 auto;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 5%;
 }
 
-/* Utilities */
+.section-padding {
+    padding: 100px 0;
+}
+
+@media (max-width: 768px) {
+    .section-padding {
+        padding: 60px 0;
+    }
+}
+
+/* Buttons - Minimalist */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 1rem;
+    padding: 14px 32px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     transition: var(--transition);
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-primary {
     background-color: var(--primary);
     color: var(--text-inverse);
+    border: 1px solid var(--primary);
 }
 
 .btn-primary:hover {
-    background-color: #000;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background-color: transparent;
+    color: var(--primary);
 }
 
-.btn-secondary {
-    background-color: var(--secondary);
-    color: #fff;
+/* Animations Pipeline */
+.fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.btn-secondary:hover {
-    background-color: #bfa030;
-}
-
-.btn-yellow {
-    background-color: #f39c12;
-    color: #fff;
-}
-
-.btn-yellow:hover {
-    background-color: #e67e22;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-/* Animations */
-@keyframes fadeIn {
+@keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.animate-fade-in {
-    animation: fadeIn 0.8s ease forwards;
 }

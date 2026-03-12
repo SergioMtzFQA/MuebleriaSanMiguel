@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Landing from './pages/Landing';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Gallery from './pages/Gallery';
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
             <main>
                 <Routes>
                     <Route path="/" element={<Landing />} />
+                    <Route path="/galeria" element={<Gallery />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="*" element={<Landing />} />

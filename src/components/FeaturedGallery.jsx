@@ -3,15 +3,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import './FeaturedGallery.css';
 
+import mueble1 from '../assets/Muebles/Mueble1.png';
+import mueble2 from '../assets/Muebles/Mueble2.png';
+import mueble3 from '../assets/Muebles/Mueble3.jpeg';
+import mueble4 from '../assets/Muebles/Mueble4.jpeg';
+import mueble5 from '../assets/Muebles/Mueble5.jpg';
+
 const FeaturedGallery = () => {
-    // 6 Example furniture images from Unsplash (mix of living rooms, dining, etc.)
     const images = [
-        { id: 1, src: "https://images.unsplash.com/photo-1550226891-ef816aed4a98?q=80&w=1200&auto=format&fit=crop", alt: "Sala Moderna" },
-        { id: 2, src: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop", alt: "Sala Minimalista" },
-        { id: 3, src: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1200&auto=format&fit=crop", alt: "Comedor Elegante" },
-        { id: 4, src: "https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=1200&auto=format&fit=crop", alt: "Sillón Premium" },
-        { id: 5, src: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?q=80&w=1200&auto=format&fit=crop", alt: "Recámara Principal" },
-        { id: 6, src: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop", alt: "Sala Contemporánea" },
+        { id: 1, src: mueble1, alt: "Mueble San Miguel 1" },
+        { id: 2, src: mueble2, alt: "Mueble San Miguel 2" },
+        { id: 3, src: mueble3, alt: "Mueble San Miguel 3" },
+        { id: 4, src: mueble4, alt: "Mueble San Miguel 4" },
+        { id: 5, src: mueble5, alt: "Mueble San Miguel 5" }
     ];
 
     const [currentIndex, setCurrentIndex] = useState(0);

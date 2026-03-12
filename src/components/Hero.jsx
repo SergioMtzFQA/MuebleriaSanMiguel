@@ -20,7 +20,7 @@ const Hero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
-                    Diseño Exclusivo <br /> <span className="highlight">Para Tu Espacio</span>
+                    Trabajamos para hacer de tu hogar <br /> <span className="highlight">Un mejor espacio</span>
                 </motion.h1>
 
                 <motion.p

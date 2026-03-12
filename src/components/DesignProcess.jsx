@@ -27,8 +27,7 @@ const DesignProcess = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
-                        <div className="card-icon">01</div>
-                        <h3>Excelencia en materiales</h3>
+                        <div className="card-icon">Excelencia en materiales</div>
                         <p>Compromiso con el uso de materales alta calidad, garantizando durabilidad y confianza en cada producto.</p>
                     </motion.div>
 
@@ -39,8 +38,7 @@ const DesignProcess = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.4 }}
                     >
-                        <div className="card-icon">02</div>
-                        <h3>Diseño elegante y funcionales</h3>
+                        <div className="card-icon">Diseño elegante y funcionales</div>
                         <p>Creación de muebles que combinan estética con practicidad para el hogar moderno.</p>
                     </motion.div>
 
@@ -51,8 +49,7 @@ const DesignProcess = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.6 }}
                     >
-                        <div className="card-icon">03</div>
-                        <h3>Inovación constante</h3>
+                        <div className="card-icon">Inovación constante</div>
                         <p>Búsqueda de nuevas tendencias y tecnologías en Diseño y fabricación para mantenerte a la vanguardia.</p>
                     </motion.div>
 
@@ -63,8 +60,7 @@ const DesignProcess = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.6 }}
                     >
-                        <div className="card-icon">04</div>
-                        <h3 >Relaciones de largo plazo</h3>
+                        <div className="card-icon">Relaciones de largo plazo</div>
                         <p>Construcción de alianzas sólidas con las mejores mueblerías de México, basadas en confianza y resultados.</p>
                     </motion.div>
                 </div>

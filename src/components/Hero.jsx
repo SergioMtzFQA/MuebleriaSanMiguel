@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import PortadaFondo from '../assets/Muebles/Fondo_portada.jpeg';
+
 import './Hero.css';
 // Using a placeholder URL that represents a furniture store for now, 
 // can be replaced by a local asset 'company_hero.jpg' when provided
-const heroImage = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop";
+const heroImage = PortadaFondo;
 
 const Hero = () => {
     return (

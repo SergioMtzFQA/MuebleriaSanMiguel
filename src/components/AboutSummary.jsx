@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import aboutBg from '../assets/Muebles/Mueble1_Mejorado.png'; // Optimizada para cargar más rápido
+import aboutBg from '../assets/Muebles/Fondo_portada.jpeg'; // Optimizada para cargar más rápido
 import './AboutSummary.css';
 
 const AboutSummary = () => {

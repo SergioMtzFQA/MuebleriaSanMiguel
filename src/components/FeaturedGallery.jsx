@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import './FeaturedGallery.css';
@@ -8,6 +8,9 @@ import mueble2 from '../assets/Muebles/Mueble2.png';
 import mueble3 from '../assets/Muebles/Mueble3.jpeg';
 import mueble4 from '../assets/Muebles/Mueble4.jpeg';
 import mueble5 from '../assets/Muebles/Mueble5.jpg';
+import mueble6 from '../assets/Muebles/Mueble6.PNG';
+import mueble7 from '../assets/Muebles/Mueble7.PNG';
+import mueble8 from '../assets/Muebles/Mueble8.PNG';
 
 const FeaturedGallery = () => {
     const images = [
@@ -15,10 +18,24 @@ const FeaturedGallery = () => {
         { id: 2, src: mueble2, alt: "Mueble San Miguel 2" },
         { id: 3, src: mueble3, alt: "Mueble San Miguel 3" },
         { id: 4, src: mueble4, alt: "Mueble San Miguel 4" },
-        { id: 5, src: mueble5, alt: "Mueble San Miguel 5" }
+        { id: 5, src: mueble5, alt: "Mueble San Miguel 5" },
+        { id: 6, src: mueble6, alt: "Mueble San Miguel 6" },
+        { id: 7, src: mueble7, alt: "Mueble San Miguel 7" },
+        { id: 8, src: mueble8, alt: "Mueble San Miguel 8" }
     ];
 
     const [currentIndex, setCurrentIndex] = useState(0);
+    const thumbnailsRef = useRef(null);
+
+    useEffect(() => {
+        if (thumbnailsRef.current && thumbnailsRef.current.children[currentIndex]) {
+            thumbnailsRef.current.children[currentIndex].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'nearest'
+            });
+        }
+    }, [currentIndex]);
 
     const handleNext = () => {
         setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
@@ -66,7 +83,7 @@ const FeaturedGallery = () => {
                     </div>
 
                     {/* Thumbnails Row */}
-                    <div className="gallery-thumbnails">
+                    <div className="gallery-thumbnails" ref={thumbnailsRef}>
                         {images.map((image, index) => (
                             <button
                                 key={image.id}

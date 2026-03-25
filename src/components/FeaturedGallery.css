@@ -77,15 +77,37 @@
     gap: 12px;
     overflow-x: auto;
     /* Allow horizontal scroll on mobile if needed */
-    padding: 8px 4px;
-    /* padding for focus shadows */
-    /* hide scrollbar for cleaner look */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    padding: 8px 4px 12px 4px;
+    /* padding for focus shadows and bottom space for scrollbar */
+    scroll-behavior: smooth;
 }
 
+/* Styled scrollbar for thumbnails - auto-hides when not hovered */
 .gallery-thumbnails::-webkit-scrollbar {
-    display: none;
+    height: 8px;
+}
+
+.gallery-thumbnails::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+}
+
+.gallery-thumbnails::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+}
+
+/* Show scrollbar when hovering the thumbnail container */
+.gallery-thumbnails:hover::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.gallery-thumbnails:hover::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+
+.gallery-thumbnails:hover::-webkit-scrollbar-thumb:hover {
+    background: #999;
 }
 
 .thumbnail-btn {

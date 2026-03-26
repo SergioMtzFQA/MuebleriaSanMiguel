@@ -22,7 +22,7 @@ const Hero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
-                    Trabajamos para hacer de tu hogar <br /> <span className="highlight">Un mejor espacio</span>
+                    Trabajamos para hacer de tu hogar <br /> <span className="highlight">un mejor espacio</span>
                 </motion.h1>
 
                 <motion.p
@@ -30,7 +30,7 @@ const Hero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                 >
-                    Fabricamos muebles que definen tu estilo. Calidad premium para mueblerías exigentes.
+                    Fabricamos muebles que definen tu estilo. <br /> Calidad premium para mueblerías exigentes.
                 </motion.p>
 
                 <motion.div

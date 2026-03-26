@@ -28,7 +28,7 @@ const DesignProcess = () => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
                         <div className="card-icon">Excelencia en materiales</div>
-                        <p>Compromiso con el uso de materales alta calidad, garantizando durabilidad y confianza en cada producto.</p>
+                        <p>Compromiso con el uso de materiales de alta calidad, garantizando durabilidad y confianza en cada producto.</p>
                     </motion.div>
 
                     <motion.div
@@ -38,7 +38,7 @@ const DesignProcess = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.4 }}
                     >
-                        <div className="card-icon">Diseño elegante y funcionales</div>
+                        <div className="card-icon">Diseños elegantes y funcionales</div>
                         <p>Creación de muebles que combinan estética con practicidad para el hogar moderno.</p>
                     </motion.div>
 
@@ -49,8 +49,8 @@ const DesignProcess = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.6 }}
                     >
-                        <div className="card-icon">Inovación constante</div>
-                        <p>Búsqueda de nuevas tendencias y tecnologías en Diseño y fabricación para mantenerte a la vanguardia.</p>
+                        <div className="card-icon">Innovación constante</div>
+                        <p>Búsqueda de nuevas tendencias y tecnologías en diseño y fabricación para mantenerte a la vanguardia.</p>
                     </motion.div>
 
                     <motion.div

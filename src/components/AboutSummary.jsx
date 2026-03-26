@@ -26,10 +26,11 @@ const AboutSummary = () => {
                         transition={{ duration: 0.8 }}
                     >
                         <h2>Sobre Nosotros</h2>
-                        <h3 className="subtitle">Descubre muebles de calidad en Muebles San Miguel</h3>
+                        <h3 className="subtitle">Descubre calidad en Muebles San Miguel</h3>
 
                         <p className="lead">
-                            Muebles San Miguel comenzó su trayectoria en 2014, cimentada en más de cuatro décadas de experiencia en la industria de los muebles.
+                            Muebles San Miguel comenzó su trayectoria en 2014<br />
+                            cimentada en más de cuatro décadas de experiencia en la Industria de los Muebles.
                         </p>
                         <p>
                             Desde nuestros inicios, hemos mantenido una visión clara: ofrecer al mercado mexicano productos de excelente calidad que combinen diseño, funcionalidad y accesibilidad para cada hogar. Hoy nos distinguimos por soluciones confiables y estéticamente atractivas para salas y comedores.

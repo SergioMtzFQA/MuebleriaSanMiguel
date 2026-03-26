@@ -22,7 +22,7 @@ const AboutPage = () => {
                         <div className="about-grid">
                             <div className="about-text" style={{ width: '100%', maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
                                 <p style={{ textAlign: 'center', display: 'block' }}>
-                                    Muebles San Miguel comenzó su trayectoria en 2014 bajo el nombre Sillas San Miguel,
+                                    Muebles San Miguel comenzó su trayectoria en 2014 bajo el nombre Sillas San Miguel<br />
                                     cimentada en más de cuatro décadas de experiencia en la industria de los muebles.
                                     Desde sus inicios, ha mantenido una visión clara: ofrecer al mercado mexicano productos de calida
                                     que combinen diseño, funcionalidad y accesibilidad.

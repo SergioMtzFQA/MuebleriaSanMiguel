@@ -11,6 +11,15 @@ import mueble5 from '../assets/Muebles/Mueble5.jpg';
 import mueble6 from '../assets/Muebles/Mueble6.PNG';
 import mueble7 from '../assets/Muebles/Mueble7.PNG';
 import mueble8 from '../assets/Muebles/Mueble8.PNG';
+import newMueble9 from '../assets/Muebles/20250715_194142.jpg';
+import newMueble10 from '../assets/Muebles/Fondo_portada.jpeg';
+import smartBG1 from '../assets/Muebles/SmartBG_2025-01-10_bf165f47-d24a-4771-8fcb-687a689d8fa6.png';
+import smartBG2 from '../assets/Muebles/SmartBG_2025-05-02_9606bd62-33d7-44af-9188-2b60ef36b829.png';
+import smartBG3 from '../assets/Muebles/SmartBG_2025-05-02_c05353f9-e483-4178-8959-c887bf87694d.png';
+import smartBG4 from '../assets/Muebles/SmartBG_2025-05-02_ee65e294-c534-481e-9a33-5ca4c3cb6f61.png';
+import smartBG5 from '../assets/Muebles/SmartBG_2025-05-21_dd64bb4d-4c92-415b-80c7-af2cbe15fc41.png';
+import smartBG6 from '../assets/Muebles/SmartBG_2025-08-20_3476cbbb-ff3e-47bc-8d1d-ed4cc134fbde.png';
+import smartBG7 from '../assets/Muebles/SmartBG_2025-09-24_eafb5990-1faa-46b1-97c8-91bdf890207e.png';
 
 const FeaturedGallery = () => {
     const images = [
@@ -21,7 +30,16 @@ const FeaturedGallery = () => {
         { id: 5, src: mueble5, alt: "Mueble San Miguel 5" },
         { id: 6, src: mueble6, alt: "Mueble San Miguel 6" },
         { id: 7, src: mueble7, alt: "Mueble San Miguel 7" },
-        { id: 8, src: mueble8, alt: "Mueble San Miguel 8" }
+        { id: 8, src: mueble8, alt: "Mueble San Miguel 8" },
+        { id: 9, src: newMueble9, alt: "Mueble San Miguel 9" },
+        { id: 10, src: newMueble10, alt: "Mueble San Miguel 10" },
+        { id: 11, src: smartBG1, alt: "Diseño San Miguel 1" },
+        { id: 12, src: smartBG2, alt: "Diseño San Miguel 2" },
+        { id: 13, src: smartBG3, alt: "Diseño San Miguel 3" },
+        { id: 14, src: smartBG4, alt: "Diseño San Miguel 4" },
+        { id: 15, src: smartBG5, alt: "Diseño San Miguel 5" },
+        { id: 16, src: smartBG6, alt: "Diseño San Miguel 6" },
+        { id: 17, src: smartBG7, alt: "Diseño San Miguel 7" }
     ];
 
     const [currentIndex, setCurrentIndex] = useState(0);

@@ -2,17 +2,23 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import './ClientsGrid.css';
 
+// Logo imports
+import coppelLogo from '../assets/logos/coppel.png';
+import racLogo from '../assets/logos/rac.png';
+import elizondoLogo from '../assets/logos/Elizondo.jpg';
+import folyLogo from '../assets/logos/foly-muebles-logo.jpg';
+import tamarindoLogo from '../assets/logos/Tamarindo.png';
+import millerKnollLogo from '../assets/logos/millerknoll_logo_black_large.png';
+
 const ClientsGrid = () => {
-    // Array of objects representing clients. 
-    // The logoUrls point to professional geometric architectural vector placeholders 
-    // to simulate premium logos until real ones are provided.
+    // Array of objects representing clients with their corresponding imported logos.
     const clients = [
-        { name: "Muebles Troncoso", logoUrl: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=300&h=150&fit=crop&q=80&blend=000000&blend-mode=screen&blend-alpha=90" },
-        { name: "Liverpool", logoUrl: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=300&h=150&fit=crop&q=80&blend=000000&blend-mode=screen&blend-alpha=90" },
-        { name: "Palacio de Hierro", logoUrl: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=300&h=150&fit=crop&q=80&blend=000000&blend-mode=screen&blend-alpha=90" },
-        { name: "Sears", logoUrl: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=300&h=150&fit=crop&q=80&blend=000000&blend-mode=screen&blend-alpha=90" },
-        { name: "Coppel", logoUrl: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=300&h=150&fit=crop&q=80&blend=000000&blend-mode=screen&blend-alpha=90" },
-        { name: "Gaia", logoUrl: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=300&h=150&fit=crop&q=80&blend=000000&blend-mode=screen&blend-alpha=90" },
+        { name: "COPPEL", logo: coppelLogo },
+        { name: "RAC", logo: racLogo },
+        { name: "MUEBLERIA ELIZONDO", logo: elizondoLogo },
+        { name: "FOLY MUEBLES", logo: folyLogo },
+        { name: "TAMARINDO", logo: tamarindoLogo },
+        { name: "MILLER KNOLL", logo: millerKnollLogo },
     ];
 
     const containerVariants = {
@@ -48,11 +54,13 @@ const ClientsGrid = () => {
                         key={index}
                         variants={itemVariants}
                     >
-                        {/* We use a placeholder image structure here. 
-                            When real logos are ready, src={client.logoUrl} will be used. 
-                            For now, we simulate a logo block visually. */}
-                        <div className="logo-placeholder">
-                            <span className="logo-text-fallback">{client.name}</span>
+                        <div className="client-card-inner">
+                            <div className="logo-container">
+                                <img src={client.logo} alt={`${client.name} logo`} className="client-logo-img" />
+                            </div>
+                            <div className="client-name-container">
+                                <span className="client-name-text">{client.name}</span>
+                            </div>
                         </div>
                     </motion.div>
                 ))}

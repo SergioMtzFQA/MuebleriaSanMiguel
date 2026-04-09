@@ -17,7 +17,7 @@ const ContactPage = () => {
                     <div className="contact-grid">
                         <div className="contact-info">
                             <h3>Información de Contacto</h3>
-                            <p style={{ marginBottom: '1rem' }}>Estamos aqui para atenderte. Contáctanos para cotizaciones o dudas.</p>
+                            <p style={{ marginBottom: '1rem' }}>Estamos aquí para atenderte. Contáctanos para cotizaciones o dudas.</p>
 
                             <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                                 <MapPin size={24} style={{ minWidth: '24px', color: 'var(--secondary)' }} />

@@ -33,7 +33,8 @@ const AboutSummary = () => {
                             cimentada en más de cuatro décadas de experiencia en la Industria de los Muebles.
                         </p>
                         <p>
-                            Desde nuestros inicios, hemos mantenido una visión clara: ofrecer al mercado mexicano productos de excelente calidad que combinen diseño, funcionalidad y accesibilidad para cada hogar. Hoy nos distinguimos por soluciones confiables y estéticamente atractivas para salas y comedores.
+                            Desde nuestros inicios, hemos mantenido una visión clara: ofrecer al mercado mexicano productos de excelente calidad que combinen diseño, funcionalidad y accesibilidad para cada hogar. <br />
+                            Hoy nos distinguimos por soluciones confiables y estéticamente atractivas para salas y comedores.
                         </p>
                         <p>
                             Nuestra propuesta se basa en materiales premium, diseños pensados para la vida cotidiana y precios competitivos.

@@ -14,6 +14,10 @@ const Hero = () => {
             <div className="hero-background">
                 <img src={heroImage} alt="Mueblería San Miguel - Showroom" />
                 <div className="overlay"></div>
+                <div className="vertical-slices">
+                    <div className="slice-gap"></div>
+                    <div className="slice-gap"></div>
+                </div>
             </div>
 
             <div className="container hero-content">

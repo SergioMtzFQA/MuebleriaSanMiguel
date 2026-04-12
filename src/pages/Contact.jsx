@@ -32,7 +32,7 @@ const ContactPage = () => {
                                 <Phone size={24} style={{ minWidth: '24px', color: 'var(--secondary)' }} />
                                 <div>
                                     <strong>Teléfono:</strong><br />
-                                    +52 811 938 9548
+                                    +52 821-688-1650
                                 </div>
                             </div>
 
@@ -40,7 +40,7 @@ const ContactPage = () => {
                                 <Mail size={24} style={{ minWidth: '24px', color: 'var(--secondary)' }} />
                                 <div>
                                     <strong>Email:</strong><br />
-                                    humega75@gmail.com
+                                    ventas@sillassanmiguel.mx
                                 </div>
                             </div>
                         </div>

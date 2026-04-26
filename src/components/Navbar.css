@@ -80,6 +80,7 @@
     flex-direction: column;
     cursor: pointer;
     gap: 6px;
+    color: #ffffff;
 }
 
 .bar {

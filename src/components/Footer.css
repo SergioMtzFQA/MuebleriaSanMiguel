@@ -45,7 +45,8 @@
     padding-top: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     color: #888;
-    font-size: 0.8rem;
+    font-size: 0.65rem;
+    /* Reduced from 0.8rem */
 }
 
 @media (max-width: 768px) {

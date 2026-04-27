@@ -3,27 +3,27 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import './FeaturedGallery.css';
 
-import mueble1 from '../assets/Muebles/Mueble1.png';
-import mueble2 from '../assets/Muebles/Mueble2.png';
-import mueble4 from '../assets/Muebles/Mueble4.jpeg';
-import mueble6 from '../assets/Muebles/Mueble6.PNG';
-import mueble7 from '../assets/Muebles/Mueble7.PNG';
-import mueble8 from '../assets/Muebles/Mueble8.PNG';
-import newMueble10 from '../assets/Muebles/Fondo_portada.jpeg';
-import smartBG1 from '../assets/Muebles/SmartBG_2025-01-10_bf165f47-d24a-4771-8fcb-687a689d8fa6.png';
-import smartBG2 from '../assets/Muebles/SmartBG_2025-05-02_9606bd62-33d7-44af-9188-2b60ef36b829.png';
-import smartBG3 from '../assets/Muebles/SmartBG_2025-05-02_c05353f9-e483-4178-8959-c887bf87694d.png';
-import smartBG4 from '../assets/Muebles/SmartBG_2025-05-02_ee65e294-c534-481e-9a33-5ca4c3cb6f61.png';
-import smartBG5 from '../assets/Muebles/SmartBG_2025-05-21_dd64bb4d-4c92-415b-80c7-af2cbe15fc41.png';
-import smartBG6 from '../assets/Muebles/SmartBG_2025-08-20_3476cbbb-ff3e-47bc-8d1d-ed4cc134fbde.png';
-import smartBG7 from '../assets/Muebles/SmartBG_2025-09-24_eafb5990-1faa-46b1-97c8-91bdf890207e.png';
-import smartBG8 from '../assets/Muebles/SmartBG_2025-08-20_f887ef5f-9bd0-4564-82d0-5184b24909e9.png';
-import smartBG9 from '../assets/Muebles/SmartBG_2025-08-21_e4dccec2-cd41-47ba-aea2-f9d036722cb8.png';
-import smartBG10 from '../assets/Muebles/SmartBG_2025-09-26_dd1bba9c-4ef6-4988-a87d-0201901bda14.png';
-import smartBG11 from '../assets/Muebles/SmartBG_2026-02-04_e0f8741b-fd05-4805-a7bc-987256f36d0f (1).png';
-import smartBG12 from '../assets/Muebles/SmartBG_2026-02-06_b5516b8f-dbda-467d-a61b-f1481f006b55 (1).png';
-import smartBG13 from '../assets/Muebles/SmartBG_2026-04-09_8d9f20d9-d844-48f6-b418-a76a3f3efdb6.png';
-import smartBG14 from '../assets/Muebles/SmartBG_2026-04-09_e9fb4d20-3921-40d7-a0ad-e8e7d1bf07a8.png';
+import mueble1 from '../assets/Muebles/Mueble1.webp';
+import mueble2 from '../assets/Muebles/Mueble2.webp';
+import mueble4 from '../assets/Muebles/Mueble4.webp';
+import mueble6 from '../assets/Muebles/Mueble6.webp';
+import mueble7 from '../assets/Muebles/Mueble7.webp';
+import mueble8 from '../assets/Muebles/Mueble8.webp';
+import newMueble10 from '../assets/Muebles/Fondo_portada.webp';
+import smartBG1 from '../assets/Muebles/SmartBG_2025-01-10_bf165f47-d24a-4771-8fcb-687a689d8fa6.webp';
+import smartBG2 from '../assets/Muebles/SmartBG_2025-05-02_9606bd62-33d7-44af-9188-2b60ef36b829.webp';
+import smartBG3 from '../assets/Muebles/SmartBG_2025-05-02_c05353f9-e483-4178-8959-c887bf87694d.webp';
+import smartBG4 from '../assets/Muebles/SmartBG_2025-05-02_ee65e294-c534-481e-9a33-5ca4c3cb6f61.webp';
+import smartBG5 from '../assets/Muebles/SmartBG_2025-05-21_dd64bb4d-4c92-415b-80c7-af2cbe15fc41.webp';
+import smartBG6 from '../assets/Muebles/SmartBG_2025-08-20_3476cbbb-ff3e-47bc-8d1d-ed4cc134fbde.webp';
+import smartBG7 from '../assets/Muebles/SmartBG_2025-09-24_eafb5990-1faa-46b1-97c8-91bdf890207e.webp';
+import smartBG8 from '../assets/Muebles/SmartBG_2025-08-20_f887ef5f-9bd0-4564-82d0-5184b24909e9.webp';
+import smartBG9 from '../assets/Muebles/SmartBG_2025-08-21_e4dccec2-cd41-47ba-aea2-f9d036722cb8.webp';
+import smartBG10 from '../assets/Muebles/SmartBG_2025-09-26_dd1bba9c-4ef6-4988-a87d-0201901bda14.webp';
+import smartBG11 from '../assets/Muebles/SmartBG_2026-02-04_e0f8741b-fd05-4805-a7bc-987256f36d0f (1).webp';
+import smartBG12 from '../assets/Muebles/SmartBG_2026-02-06_b5516b8f-dbda-467d-a61b-f1481f006b55 (1).webp';
+import smartBG13 from '../assets/Muebles/SmartBG_2026-04-09_8d9f20d9-d844-48f6-b418-a76a3f3efdb6.webp';
+import smartBG14 from '../assets/Muebles/SmartBG_2026-04-09_e9fb4d20-3921-40d7-a0ad-e8e7d1bf07a8.webp';
 
 const FeaturedGallery = () => {
     const images = [
@@ -52,6 +52,22 @@ const FeaturedGallery = () => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const thumbnailsRef = useRef(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
+    const handleScroll = () => {
+        if (thumbnailsRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = thumbnailsRef.current;
+            setCanScrollLeft(scrollLeft > 0);
+            setCanScrollRight(Math.ceil(scrollLeft) < scrollWidth - clientWidth - 1);
+        }
+    };
+
+    useEffect(() => {
+        handleScroll();
+        window.addEventListener('resize', handleScroll);
+        return () => window.removeEventListener('resize', handleScroll);
+    }, []);
 
     useEffect(() => {
         if (thumbnailsRef.current && thumbnailsRef.current.children[currentIndex]) {
@@ -99,27 +115,33 @@ const FeaturedGallery = () => {
                             />
                         </AnimatePresence>
 
-                        {/* Navigation Arrows */}
-                        <button className="nav-arrow prev" onClick={handlePrev} aria-label="Previous Image">
-                            <ChevronLeft size={24} />
-                        </button>
-                        <button className="nav-arrow next" onClick={handleNext} aria-label="Next Image">
-                            <ChevronRight size={24} />
-                        </button>
+                        {/* Navigation Arrows Removed */}
                     </div>
 
                     {/* Thumbnails Row */}
-                    <div className="gallery-thumbnails" ref={thumbnailsRef}>
-                        {images.map((image, index) => (
-                            <button
-                                key={image.id}
-                                className={`thumbnail-btn ${index === currentIndex ? 'active' : ''}`}
-                                onClick={() => handleThumbnailClick(index)}
-                                aria-label={`View ${image.alt}`}
-                            >
-                                <img src={image.src} alt={`Thumbnail ${index + 1}`} />
-                            </button>
-                        ))}
+                    <div className="gallery-thumbnails-wrapper">
+                        {canScrollLeft && (
+                            <div className="scroll-indicator-hint left" aria-hidden="true">
+                                <ChevronLeft size={20} />
+                            </div>
+                        )}
+                        <div className="gallery-thumbnails" ref={thumbnailsRef} onScroll={handleScroll}>
+                            {images.map((image, index) => (
+                                <button
+                                    key={image.id}
+                                    className={`thumbnail-btn ${index === currentIndex ? 'active' : ''}`}
+                                    onClick={() => handleThumbnailClick(index)}
+                                    aria-label={`View ${image.alt}`}
+                                >
+                                    <img src={image.src} alt={`Thumbnail ${index + 1}`} />
+                                </button>
+                            ))}
+                        </div>
+                        {canScrollRight && (
+                            <div className="scroll-indicator-hint right" aria-hidden="true">
+                                <ChevronRight size={20} />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@
 }
 
 .gallery-container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -72,14 +72,64 @@
 }
 
 /* Thumbnails */
+.gallery-thumbnails-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.scroll-indicator-hint {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    color: var(--primary);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.scroll-indicator-hint.right {
+    right: 0;
+    justify-content: flex-end;
+    background: linear-gradient(to right, rgba(255,255,255,0), var(--surface) 80%);
+    padding-right: 5px;
+    animation: bounceRight 2s infinite;
+}
+
+.scroll-indicator-hint.left {
+    left: 0;
+    justify-content: flex-start;
+    background: linear-gradient(to left, rgba(255,255,255,0), var(--surface) 80%);
+    padding-left: 5px;
+    animation: bounceLeft 2s infinite;
+}
+
+@keyframes bounceRight {
+    0%, 100% { padding-right: 5px; }
+    50% { padding-right: 10px; }
+}
+
+@keyframes bounceLeft {
+    0%, 100% { padding-left: 5px; }
+    50% { padding-left: 10px; }
+}
+
+/* Hide indicator on hover so it doesn't distract when interacting */
+.gallery-thumbnails-wrapper:hover .scroll-indicator-hint {
+    opacity: 0.5;
+}
 .gallery-thumbnails {
     display: flex;
     gap: 12px;
     overflow-x: auto;
     /* Allow horizontal scroll on mobile if needed */
-    padding: 8px 4px 12px 4px;
+    padding: 8px 40px 12px 40px; /* padding on both sides for indicators */
     /* padding for focus shadows and bottom space for scrollbar */
     scroll-behavior: smooth;
+    flex: 1;
 }
 
 /* Styled scrollbar for thumbnails - auto-hides when not hovered */
@@ -144,6 +194,10 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+    .gallery-main-view {
+        aspect-ratio: 4 / 3; /* Make the container taller on mobile for a larger image */
+    }
+
     .nav-arrow {
         width: 36px;
         height: 36px;

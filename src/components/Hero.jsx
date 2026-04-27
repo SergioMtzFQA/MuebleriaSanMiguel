@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import PortadaFondo from '../assets/Muebles/Fondo_portada.jpeg';
+import PortadaFondo from '../assets/Muebles/Fondo_portada.webp';
 
 import './Hero.css';
 // Using a placeholder URL that represents a furniture store for now, 

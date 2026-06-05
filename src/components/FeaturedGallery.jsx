@@ -55,11 +55,19 @@ const FeaturedGallery = () => {
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
 
+    const isScrolling = useRef(false);
+
     const handleScroll = () => {
-        if (thumbnailsRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = thumbnailsRef.current;
-            setCanScrollLeft(scrollLeft > 0);
-            setCanScrollRight(Math.ceil(scrollLeft) < scrollWidth - clientWidth - 1);
+        if (!isScrolling.current && thumbnailsRef.current) {
+            isScrolling.current = true;
+            requestAnimationFrame(() => {
+                if (thumbnailsRef.current) {
+                    const { scrollLeft, scrollWidth, clientWidth } = thumbnailsRef.current;
+                    setCanScrollLeft(scrollLeft > 0);
+                    setCanScrollRight(Math.ceil(scrollLeft) < scrollWidth - clientWidth - 1);
+                }
+                isScrolling.current = false;
+            });
         }
     };
 
@@ -71,11 +79,14 @@ const FeaturedGallery = () => {
 
     useEffect(() => {
         if (thumbnailsRef.current && thumbnailsRef.current.children[currentIndex]) {
-            thumbnailsRef.current.children[currentIndex].scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'nearest'
-            });
+            const timeoutId = setTimeout(() => {
+                thumbnailsRef.current?.children[currentIndex]?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'nearest'
+                });
+            }, 0);
+            return () => clearTimeout(timeoutId);
         }
     }, [currentIndex]);
 
@@ -112,6 +123,8 @@ const FeaturedGallery = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.3 }}
+                                fetchPriority="high"
+                                loading="eager"
                             />
                         </AnimatePresence>
 

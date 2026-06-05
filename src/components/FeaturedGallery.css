@@ -132,31 +132,22 @@
     flex: 1;
 }
 
-/* Styled scrollbar for thumbnails - auto-hides when not hovered */
+/* Styled scrollbar for thumbnails - always visible on desktop */
 .gallery-thumbnails::-webkit-scrollbar {
     height: 8px;
 }
 
 .gallery-thumbnails::-webkit-scrollbar-track {
-    background: transparent;
+    background: #f1f1f1;
     border-radius: 4px;
 }
 
 .gallery-thumbnails::-webkit-scrollbar-thumb {
-    background: transparent;
+    background: #ccc;
     border-radius: 4px;
 }
 
-/* Show scrollbar when hovering the thumbnail container */
-.gallery-thumbnails:hover::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-.gallery-thumbnails:hover::-webkit-scrollbar-thumb {
-    background: #ccc;
-}
-
-.gallery-thumbnails:hover::-webkit-scrollbar-thumb:hover {
+.gallery-thumbnails::-webkit-scrollbar-thumb:hover {
     background: #999;
 }
 
@@ -214,5 +205,10 @@
     .thumbnail-btn {
         flex: 0 0 calc(33.333% - 8px);
         /* Switch to showing ~3 at a time on small screens so they don't get tiny */
+    }
+
+    /* Hide scrollbar completely on mobile devices */
+    .gallery-thumbnails::-webkit-scrollbar {
+        display: none;
     }
 }
